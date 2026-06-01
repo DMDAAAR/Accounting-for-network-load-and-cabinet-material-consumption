@@ -23,5 +23,5 @@ infrastructure-project/
 ├── models/               # Модели для работы с БД (.model.php)
 ├── views/                # HTML-шаблоны страниц (.views.php)
 ├── uploads/              # Папка для загружаемых фотографий дефектов
-└── connectDB.php         # Подключение к базе данных
+├── connectDB.php         # Подключение к базе данных
 └── index.php             # Точка входа (перенаправление на дашборд)
