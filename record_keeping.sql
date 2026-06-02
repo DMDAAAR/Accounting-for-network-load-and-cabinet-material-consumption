@@ -297,8 +297,7 @@ ALTER TABLE `material_usage`
   ADD CONSTRAINT `material_usage_ibfk_4` FOREIGN KEY (`used_by`) REFERENCES `users` (`id`);
 
 --
--- Ограничения внешнего ключа таблицы `network_p
-oints`
+-- Ограничения внешнего ключа таблицы `network_points`
 --
 ALTER TABLE `network_points`
   ADD CONSTRAINT `fk_network_points_location_end` FOREIGN KEY (`location_end_id`) REFERENCES `locations` (`id`) ON DELETE SET NULL,
