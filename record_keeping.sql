@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Июн 01 2026 г., 17:08
+-- Время создания: Июн 02 2026 г., 17:38
 -- Версия сервера: 5.7.39
--- Версия PHP: 7.2.34
+-- Версия PHP: 7.4.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -52,6 +52,17 @@ CREATE TABLE `locations` (
   `room_number` varchar(10) COLLATE utf8mb4_unicode_ci DEFAULT '319Б'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Дамп данных таблицы `locations`
+--
+
+INSERT INTO `locations` (`id`, `name`, `type`, `room_number`) VALUES
+(1, 'Кабинет 335', 'room', '335А'),
+(2, 'Кабинет 319', 'room', '319Б'),
+(3, 'Кабинет 311', 'room', '311'),
+(4, 'Кабинет 345', 'room', '345'),
+(5, 'Кабинет 301', 'room', '301');
+
 -- --------------------------------------------------------
 
 --
@@ -79,6 +90,15 @@ CREATE TABLE `materials` (
   `type` enum('cable','connector','socket','fastener','other') COLLATE utf8mb4_unicode_ci NOT NULL,
   `unit` enum('m','pcs') COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `materials`
+--
+
+INSERT INTO `materials` (`id`, `name`, `type`, `unit`) VALUES
+(1, 'Кабель UTP 5e', 'cable', 'm'),
+(2, 'Коннектор RJ45', 'connector', 'pcs'),
+(3, 'Розетка RJ45', 'socket', 'pcs');
 
 -- --------------------------------------------------------
 
@@ -112,6 +132,27 @@ CREATE TABLE `network_points` (
   `status` enum('active','defect','decommissioned') COLLATE utf8mb4_unicode_ci DEFAULT 'active',
   `last_check` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `network_points`
+--
+
+INSERT INTO `network_points` (`id`, `label`, `type`, `location_id`, `location_end_id`, `status`, `last_check`) VALUES
+(1, 'Розетка-01', 'socket', 2, NULL, 'active', '2026-06-01'),
+(2, 'Розетка-02', 'socket', 2, NULL, 'active', '2026-06-01'),
+(3, 'Розетка-03', 'socket', 2, NULL, 'active', '2026-06-01'),
+(4, 'Розетка-04', 'socket', 2, NULL, 'active', '2026-06-01'),
+(5, 'Розетка-05', 'socket', 2, NULL, 'active', '2026-06-01'),
+(6, 'Розетка-06', 'socket', 2, NULL, 'active', '2026-06-01'),
+(7, 'Розетка-07', 'socket', 2, NULL, 'active', '2026-06-01'),
+(8, 'Розетка-08', 'socket', 2, NULL, 'active', '2026-06-01'),
+(9, 'Кабель-01', 'cable_run', 2, 1, 'active', '2026-05-28'),
+(10, 'Кабель-02', 'cable_run', 2, 1, 'active', '2026-05-28'),
+(11, 'Кабель-03', 'cable_run', 2, 1, 'active', '2026-05-28'),
+(12, 'Кабель-04', 'cable_run', 2, 1, 'active', '2026-05-28'),
+(13, 'Патч-корд-01', 'patch_cord', 2, NULL, 'active', '2026-06-01'),
+(14, 'Патч-корд-02', 'patch_cord', 2, NULL, 'active', '2026-06-01'),
+(15, 'Патч-корд-03', 'patch_cord', 2, NULL, 'active', '2026-06-01');
 
 -- --------------------------------------------------------
 
@@ -197,7 +238,7 @@ ALTER TABLE `defects`
 -- AUTO_INCREMENT для таблицы `locations`
 --
 ALTER TABLE `locations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT для таблицы `logs`
@@ -221,7 +262,7 @@ ALTER TABLE `material_usage`
 -- AUTO_INCREMENT для таблицы `network_points`
 --
 ALTER TABLE `network_points`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
@@ -256,7 +297,8 @@ ALTER TABLE `material_usage`
   ADD CONSTRAINT `material_usage_ibfk_4` FOREIGN KEY (`used_by`) REFERENCES `users` (`id`);
 
 --
--- Ограничения внешнего ключа таблицы `network_points`
+-- Ограничения внешнего ключа таблицы `network_p
+oints`
 --
 ALTER TABLE `network_points`
   ADD CONSTRAINT `fk_network_points_location_end` FOREIGN KEY (`location_end_id`) REFERENCES `locations` (`id`) ON DELETE SET NULL,
