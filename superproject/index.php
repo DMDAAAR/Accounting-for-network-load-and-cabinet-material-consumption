@@ -1,2 +1,2 @@
 <?php
-header("Location: controllers/login.controller.php");
+//header("Location: controllers/login.controller.php");
