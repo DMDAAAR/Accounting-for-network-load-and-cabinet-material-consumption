@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Июн 02 2026 г., 17:38
+-- Время создания: Июн 03 2026 г., 21:32
 -- Версия сервера: 5.7.39
--- Версия PHP: 7.4.30
+-- Версия PHP: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -88,17 +88,18 @@ CREATE TABLE `materials` (
   `id` int(11) NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` enum('cable','connector','socket','fastener','other') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `unit` enum('m','pcs') COLLATE utf8mb4_unicode_ci NOT NULL
+  `unit` enum('m','pcs') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `quantity` decimal(10,2) NOT NULL DEFAULT '0.00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `materials`
 --
 
-INSERT INTO `materials` (`id`, `name`, `type`, `unit`) VALUES
-(1, 'Кабель UTP 5e', 'cable', 'm'),
-(2, 'Коннектор RJ45', 'connector', 'pcs'),
-(3, 'Розетка RJ45', 'socket', 'pcs');
+INSERT INTO `materials` (`id`, `name`, `type`, `unit`, `quantity`) VALUES
+(1, 'Кабель UTP 5e', 'cable', 'm', '998.00'),
+(2, 'Коннектор RJ45', 'connector', 'pcs', '500.00'),
+(3, 'Розетка RJ45', 'socket', 'pcs', '200.00');
 
 -- --------------------------------------------------------
 
@@ -232,7 +233,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `defects`
 --
 ALTER TABLE `defects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `locations`
@@ -250,13 +251,13 @@ ALTER TABLE `logs`
 -- AUTO_INCREMENT для таблицы `materials`
 --
 ALTER TABLE `materials`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT для таблицы `material_usage`
 --
 ALTER TABLE `material_usage`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT для таблицы `network_points`
@@ -268,7 +269,7 @@ ALTER TABLE `network_points`
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
@@ -295,13 +296,6 @@ ALTER TABLE `material_usage`
   ADD CONSTRAINT `material_usage_ibfk_2` FOREIGN KEY (`point_id`) REFERENCES `network_points` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `material_usage_ibfk_3` FOREIGN KEY (`defect_id`) REFERENCES `defects` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `material_usage_ibfk_4` FOREIGN KEY (`used_by`) REFERENCES `users` (`id`);
-
---
--- Ограничения внешнего ключа таблицы `network_points`
---
-ALTER TABLE `network_points`
-  ADD CONSTRAINT `fk_network_points_location_end` FOREIGN KEY (`location_end_id`) REFERENCES `locations` (`id`) ON DELETE SET NULL,
-  ADD CONSTRAINT `network_points_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
