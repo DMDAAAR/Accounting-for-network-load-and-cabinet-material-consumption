@@ -1,5 +1,5 @@
 <?php
-require 'connectBD.php';
-require 'models/models.php';
-$getAllpoints = getAllPoints($pdo);
-include 'index.php';
+require '../connectDB.php';
+require '../models/models.php';
+$points = getAllPoints($pdo);
+include '../views/inventory.view.php';
