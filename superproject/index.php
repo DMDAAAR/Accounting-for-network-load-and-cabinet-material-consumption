@@ -1,5 +1,7 @@
 <?php
-require_once './models/inventory.models.php';
+require_once 'db/connectDB.php';            // файл лежит рядом
+require_once 'controllers/DashboardController.php';
+dashboardIndex($pdo);
 
 $StatsPoints = getStatsPoints($pdo);
 
