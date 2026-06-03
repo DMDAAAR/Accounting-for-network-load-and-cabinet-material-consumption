@@ -8,7 +8,7 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-require_once '../connectDB.php';
+require_once '../db/connectDB.php';
 
 require_once '../models/defects.model.php';
 
