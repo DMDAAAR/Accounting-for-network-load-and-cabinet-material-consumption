@@ -14,7 +14,7 @@
 <label>Пароль</label>
 <input type="password" name="password" placeholder="Введите пароль">
 <p>
-    у вас нет аккаунта? - <a href="registr.views.php">зарегистрируйтесь</a>
+    у вас нет аккаунта? - <a href="../controllers/register.controller.php">зарегистрируйтесь</a>
 </p>
 <button type="submit">Войти</button>
 </form>

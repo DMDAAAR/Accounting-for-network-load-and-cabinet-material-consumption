@@ -17,7 +17,7 @@
     <label>Потверждение пароля</label>
     <input type="password" name="password_hash" placeholder="Потвердите пароль">
     <p>
-        у вас уже есть аккаунт? - <a href="login.views.php">Войдите</a>
+        у вас уже есть аккаунт? - <a href="../controllers/login.controller.php">Войдите</a>
     </p>
     <button type="submit">Зарегистрироваться</button>
 </form>

@@ -11,7 +11,7 @@ if (isset($_SESSION['user'])) {
 }
 
 require_once '../connectDB.php';
-require_once '../models/user.model.php';
+require_once '../models/user.models.php';
 // запрос -показать форму входа
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     include '../views/login.view.php';
