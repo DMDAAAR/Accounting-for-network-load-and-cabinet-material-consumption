@@ -24,4 +24,4 @@ function addDefect($pdo, $point_id, $category, $severity, $description, $photo_p
         return false;
     }
 }
-?>
+
