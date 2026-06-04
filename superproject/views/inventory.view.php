@@ -1,36 +1,27 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Оборудование (MVP)</title>
-</head>
-<body>
-<h1>Список сетевых точек</h1>
-<?php if (empty($points)): ?>
-    <p>Данные не получены.</p>
-<?php else: ?>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Метка</th>
-            <th>Тип</th>
-            <th>Статус</th>
-            <th>Локация</th>
-            <th>Конечная локация</th>
-            <th>Дата проверки</th>
-        </tr>
+<?php include 'components/header.view.php'; ?>
+
+<div class="container-fluid mt-4">
+    <h2>Оборудование и материалы</h2>
+
+    <!-- Пример вывода точек сети -->
+    <h4>Точки сети</h4>
+    <table class="table table-striped">
+        <thead>
+        <tr><th>ID</th><th>Метка</th><th>Тип</th><th>Статус</th></tr>
+        </thead>
+        <tbody>
         <?php foreach ($points as $point): ?>
             <tr>
-                <td><?= htmlspecialchars($point['id']) ?></td>
+                <td><?= $point['id'] ?></td>
                 <td><?= htmlspecialchars($point['label']) ?></td>
-                <td><?= htmlspecialchars($point['type']) ?></td>
-                <td><?= htmlspecialchars($point['status']) ?></td>
-                <td><?= htmlspecialchars($point['location_name'] ?? '—') ?></td>
-                <td><?= htmlspecialchars($point['location_end_name'] ?? '—') ?></td>
-                <td><?= htmlspecialchars($point['last_check'] ?? '') ?></td>
+                <td><?= $point['type'] ?></td>
+                <td><?= $point['status'] ?></td>
             </tr>
         <?php endforeach; ?>
+        </tbody>
     </table>
-<?php endif; ?>
-</body>
-</html>
+
+    <!-- Здесь можно вывести материалы, дефекты и т.д. -->
+</div>
+
+<?php include __DIR__ . '/components/footer.view.php'; ?>

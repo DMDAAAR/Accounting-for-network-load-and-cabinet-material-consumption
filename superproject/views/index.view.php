@@ -1,50 +1,62 @@
-<?php
-//header("Location: controllers/login.controller.php");
-?>
+<?php include __DIR__ . '/components/header.view.php'; ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>главная страница</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
-<body>
-    
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Учёт ЛВС</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Переключатель навигации">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="#">Главная</a>
-                <a class="nav-link" href="../controllers/login.controller.php">Вход</a>
-                <a class="nav-link" href="../controllers/register.controller.php">Регистрация</a>
-            </div>
-            </div>
-        </div>
-    </nav>
+<div class="container-fluid mt-4">
+    <h2 class="mb-3">Точки сети</h2>
 
-    <nav class="navbar bg-body-tertiary">
-        <div class="container-fluid">
-            <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Поиск">
-            <button class="btn btn-outline-secondary" type="submit">Поиск</button>
-            </form>
+    <?php if (!empty($data)): ?>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Метка</th>
+                    <th>Тип</th>
+                    <th>Статус</th>
+                    <th>Последняя проверка</th>
+                    <th>Расположение</th>
+                    <th>Конечная точка</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($data as $row): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($row['id']) ?></td>
+                        <td><?= htmlspecialchars($row['label']) ?></td>
+                        <td><?= htmlspecialchars($row['type']) ?></td>
+                        <td><?= htmlspecialchars($row['status']) ?></td>
+                        <td><?= htmlspecialchars($row['last_check']) ?></td>
+                        <td><?= htmlspecialchars($row['location_name'] ?? '') ?></td>
+                        <td><?= htmlspecialchars($row['location_end_name'] ?? '') ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
-    </nav>
 
-    <footer class="d-flex flex-wrap justify-content-between align-items-center pt-3 mt-2 text-muted small">
-        <div class="col-md-4 mb-0">© <?= date('Y') ?> УЧЁТ ЛВС — система мониторинга сети</div>
-        <div class="col-md-4 d-flex justify-content-end">
-            <span><i class="bi bi-shield-check me-1"></i> Версия 1.0 | Все права защищены</span>
-        </div>
-    </footer>
-</body>
-</html>
+        <?php if ($totalPages > 1): ?>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?page=<?= $page - 1 ?>&search=<?= urlencode($search) ?>">«</a>
+                    </li>
+                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                        <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                            <a class="page-link" href="?page=<?= $i ?>&search=<?= urlencode($search) ?>"><?= $i ?></a>
+                        </li>
+                    <?php endfor; ?>
+                    <li class="page-item <?= ($page >= $totalPages) ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?page=<?= $page + 1 ?>&search=<?= urlencode($search) ?>">»</a>
+                    </li>
+                </ul>
+            </nav>
+        <?php endif; ?>
+
+    <?php else: ?>
+        <div class="alert alert-info">Точки сети не найдены.</div>
+    <?php endif; ?>
+</div>
+
+<?php include __DIR__ . '/components/footer.view.php'; ?>
 
 
 

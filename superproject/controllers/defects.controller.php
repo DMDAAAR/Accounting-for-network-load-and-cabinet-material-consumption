@@ -8,8 +8,7 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-require_once '../db/connectDB.php';
-
+require_once '../db/connectdb.php';
 require_once '../models/defects.model.php';
 
 $userId = $_SESSION['user']['id'];
@@ -42,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     header('Location: defects.controller.php');
     exit();
 }
+
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $defects = getDefects($pdo);
     include '../views/defects.view.php';

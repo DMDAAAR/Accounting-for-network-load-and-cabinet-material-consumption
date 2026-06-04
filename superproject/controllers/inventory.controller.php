@@ -1,5 +1,8 @@
 <?php
-require '../db/connectDB.php';
-require '../models/models.php';
-$points = getAllPoints($pdo);
-include '../views/inventory.view.php';
+require_once '../db/connectdb.php';
+require_once '../models/inventory.model.php';
+
+$points    = getStatsPoints($pdo);
+$materials = getMaterialUsage($pdo);
+
+require '../views/inventory.view.php';
