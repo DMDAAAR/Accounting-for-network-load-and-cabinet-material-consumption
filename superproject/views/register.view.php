@@ -1,25 +1,25 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
-    <title>авторизация</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="/superproject/views/main.css">
+    <title>Регистрация</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/superproject/views/main.css" rel="stylesheet">
 </head>
 <body>
-<form action="" method="post">
-
-    <label>Логин</label>
-    <input type="text" name="username" placeholder="Введите свой логин">
-    <label>Пароль</label>
-    <input type="password" name="password" placeholder="Введите пароль">
-    <label>Потверждение пароля</label>
-    <input type="password" name="password_hash" placeholder="Потвердите пароль">
-    <p>
-        у вас уже есть аккаунт? - <a href="../controllers/login.controller.php">Войдите</a>
-    </p>
-    <button type="submit">Зарегистрироваться</button>
-</form>
+    <div class="container d-flex justify-content-center align-items-center min-vh-100">
+        <div class="card shadow">
+            <div class="card-body">
+                <form action="" method="post">
+                    <div class="alert alert-danger" role="alert" style="display: none;"></div>
+                    <label>Имя</label>
+                    <input type="text" class="form-control" name="username" placeholder="Baguette cook room">
+                    <label>Пароль</label>
+                    <input type="password" class="form-control" name="password_hash" placeholder="Password room">
+                    <button type="submit" class="btn-custom-green">Зарегистрироваться</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
