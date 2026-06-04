@@ -33,4 +33,3 @@ function dashboardIndex(PDO $pdo): void
     require  'views/index.view.php';
 }
 
-include 'views/index.view.php';
