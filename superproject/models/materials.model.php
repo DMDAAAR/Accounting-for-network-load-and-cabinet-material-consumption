@@ -8,8 +8,7 @@ function getMaterials($pdo){
 }
 
 function useMaterials($pdo, $material_id, $quantity){
-    $sql = "UPDATE materials SET quantity = quantity - ? WHERE id = ?";
+    $sql = "UPDATE materials SET quantity = quantity - :quantity WHERE id = :material_id";
     $stmt = $pdo->prepare($sql);
-    $stmt -> execute([$quantity, $material_id]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt -> execute([':quantity' => $quantity, ':material_id' => $material_id]);
 }

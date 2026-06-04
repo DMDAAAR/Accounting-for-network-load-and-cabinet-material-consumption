@@ -1,30 +1,12 @@
 <?php
-require '../models/materials.model.php';
-require "../db/connectDB.php";
-$materials = getMaterials($pdo);
+require '../controllers/materials.controller.php';
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Список материалов</title>
-    <style>
-        .consume-form {
-            display: inline-block;
-            margin-left: 15px;
-            vertical-align: middle;
-        }
-        .consume-form input[type="number"] {
-            width: 60px;
-            padding: 3px;
-            margin-right: 5px;
-        }
-        .consume-form button {
-            padding: 3px 10px;
-            cursor: pointer;
-        }
-    </style>
+
 </head>
 <body>
     <h2>Список материалов</h2>
@@ -37,8 +19,7 @@ $materials = getMaterials($pdo);
                 <strong>Количество:</strong> <?= htmlspecialchars($material['quantity']) ?> <?= htmlspecialchars($material['unit']) ?>
                 <strong>Остаток:</strong> <?= htmlspecialchars($material['quantity']) ?>
                 <!-- Форма для списания -->
-                <form class="consume-form" method="GET" action="#">
-                    <input type="hidden" name="action" value="consume">
+                <form class="consume-form" method="POST" action="../controllers/useMaterial.controller.php">
                     <input type="hidden" name="material_id" value="<?= $material['id'] ?>">
                     <input type="number" name="quantity" min="0" step="1" value="1" required>
                     <button type="submit">Списать</button>
@@ -46,6 +27,6 @@ $materials = getMaterials($pdo);
             </li>
         <?php endforeach; ?>
     </ul>
-    <a href="#">Вернуться на главную страницу</a>
+    <a href="../views/index.view.php">Вернуться на главную страницу</a>
 </body>
 </html>
