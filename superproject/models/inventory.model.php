@@ -16,12 +16,11 @@ function getRoomById($pdo, $id) {
 //         $stmt->execute(['id' => $id]);
 //         }
 
-
-
 //получить все точки сети
 function getStatsPoints($pdo) {
     $sql = "SELECT * FROM network_points";
     $stmt = $pdo->prepare($sql);
+    $stmt->execute(); // <-- ОБЯЗАТЕЛЬНО ДОБАВЬТЕ ЭТУ СТРОКУ!
     return $stmt->fetchAll();
 }
 //получить одну точку сети по id
@@ -141,4 +140,41 @@ function getTotalFilteredPoints(PDO $pdo, string $search): int
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     return (int) $stmt->fetchColumn();
+
+}
+function addNetworkPoint($pdo, $label, $type, $status, $location_id) {
+    $sql = "INSERT INTO network_points (label, type, status, location_id, last_check) 
+            VALUES (:label, :type, :status, :location_id, NOW())";
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([
+        ':label'       => $label,
+        ':type'        => $type,
+        ':status'      => $status,
+        ':location_id' => !empty($location_id) ? $location_id : null
+    ]);
+}
+
+function deleteNetworkPointById($pdo, $id) {
+    $sql = "DELETE FROM network_points WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([':id' => $id]);
+}
+
+function updateNetworkPoint($pdo, $id, $label, $type, $status, $location_id) {
+    $sql = "UPDATE network_points 
+            SET label = :label, type = :type, status = :status, location_id = :location_id 
+            WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([
+        ':id'          => $id,
+        ':label'       => $label,
+        ':type'        => $type,
+        ':status'      => $status,
+        ':location_id' => !empty($location_id) ? $location_id : null
+    ]);
+}
+function deleteNetworkPoint($pdo, $id) {
+    $sql = "DELETE FROM network_points WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([':id' => $id]);
 }
