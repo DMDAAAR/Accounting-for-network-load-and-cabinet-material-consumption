@@ -33,3 +33,9 @@ a{
     font-weight: bold;
     text-decoration: none;
 }
+.btn-custom-green {
+    padding: 10px;
+    background: #e3e3e3;
+    border: unset;
+    cursor: pointer;
+}
