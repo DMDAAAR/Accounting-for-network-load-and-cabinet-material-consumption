@@ -30,7 +30,7 @@ function dashboardIndex(PDO $pdo): void
     $OpenDefens    = getOpenDefects($pdo);
     $MaterialUsage = getMaterialUsage($pdo);
 
-    // require  '../views/index.view.php';
+    require  'views/index.view.php';
 }
 
 include 'views/index.view.php';
