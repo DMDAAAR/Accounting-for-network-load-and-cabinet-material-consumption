@@ -10,6 +10,7 @@ require '../controllers/materials.controller.php';
 </head>
 <body>
     <h2>Список материалов</h2>
+    <a href="../views/create.materials.view.php">Добавить материал</a>
     <ul>
         <?php foreach ($materials as $material): ?>
             <li style="margin-bottom: 8px;">
@@ -23,6 +24,15 @@ require '../controllers/materials.controller.php';
                     <input type="hidden" name="material_id" value="<?= $material['id'] ?>">
                     <input type="number" name="quantity" min="0" step="1" value="1" required>
                     <button type="submit">Списать</button>
+                </form>
+
+                 <a href="../views/edit.material.view.php?id=<?= $material['id'] ?>">Редактировать</a>
+
+                <!-- Форма для удаления -->
+                 <form class="delete-form" method="POST" action="../controllers/delete.material.controller.php" 
+                      onsubmit="return confirm('Вы уверены, что хотите удалить материал «<?= htmlspecialchars($material['name']) ?>»?')">
+                    <input type="hidden" name="material_id" value="<?= $material['id'] ?>">
+                    <button type="submit">Удалить</button>
                 </form>
             </li>
         <?php endforeach; ?>
