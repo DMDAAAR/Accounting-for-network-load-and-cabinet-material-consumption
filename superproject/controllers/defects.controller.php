@@ -47,3 +47,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     include '../views/defects.view.php';
     exit();
 }
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_id'])) {
+    $defect_id = $_POST['edit_id'];
+    $description = trim($_POST['description']);
+    $status = $_POST['status'];
+
+    if ($description == '') {
+        $_SESSION['flash_error'] = 'Описание не может быть пустым';
+        header('Location: defects.controller.php?edit_id=' . $defect_id);
+        exit();
+    }
+
+    $stmt = $pdo->prepare("UPDATE defects SET description = :description, status = :status WHERE id = :defect_id");
+    $stmt->execute([$description, $status, $defect_id]);
+
+    $_SESSION['flash_success'] = 'Дефект изменен';
+    header('Location: defects.controller.php');
+    exit();
+}
+
+if (isset($_GET['delete_id'])) {
+    $defect_id = (int)$_GET['delete_id'];
+
+    $stmt = $pdo->prepare("DELETE FROM defects WHERE id = ?");
+    $result = $stmt->execute([$defect_id]);
+
+    if ($result) {
+        $_SESSION['flash_success'] = 'Дефект #' . $defect_id . ' удален';
+    } else {
+        $_SESSION['flash_error'] = 'Ошибка при удалении';
+    }
+
+    header('Location: defects.controller.php');
+    exit();
+}

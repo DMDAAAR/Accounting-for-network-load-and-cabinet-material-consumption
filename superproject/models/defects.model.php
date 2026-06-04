@@ -25,3 +25,19 @@ function addDefect($pdo, $point_id, $category, $severity, $description, $photo_p
     }
 }
 
+function updateDefect($pdo, $id, $description, $status) {
+    $sql = "UPDATE defects SET description = :description, status = :status WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([
+        ':id' => $id,
+        ':description' => $description,
+        ':status' => $status
+    ]);
+}
+
+// Удалить дефект
+function deleteDefect($pdo, $id) {
+    $sql = "DELETE FROM defects WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([':id' => $id]);
+}

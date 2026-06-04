@@ -2,139 +2,136 @@
 if (!defined('APP_LOADED')) {
     die('Прямой доступ запрещен');
 }
-
-session_start();
 ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Журнал поломок - Учёт ЛВС</title>
+    <title>Журнал поломок</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="dashboard.controller.php">Учёт ЛВС</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Переключатель навигации">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-link" href="#">Главная</a>
-                    <a class="nav-link active" aria-current="page" href="../controllers/defects.controller.php">Журнал поломок</a>
-                    <a class="nav-link" href="#">Оборудование</a>
-                    <a class="nav-link" href="#">Материалы</a>
-                    <a class="nav-link" href="../controllers/logout.controller.php">Выход</a>
-                </div>
-            </div>
-        </div>
-    </nav>
 
-    <nav class="navbar bg-body-tertiary">
-        <div class="container-fluid">
-            <form class="d-flex" role="search" method="GET" action="defects.controller.php">
-                <input class="form-control me-2" type="search" name="search" placeholder="Поиск по описанию" aria-label="Поиск">
-                <button class="btn btn-outline-secondary" type="submit">Поиск</button>
-            </form>
-        </div>
-    </nav>
-
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-12">
-                
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2>Журнал поломок</h2>
-                </div>
-                <?php if (isset($_SESSION['flash_error'])): ?>
-                    <div class="alert alert-danger">
-                        <?php echo htmlspecialchars($_SESSION['flash_error']); unset($_SESSION['flash_error']); ?>
-                    </div>
-                <?php endif; ?>
-                
-                <?php if (isset($_SESSION['flash_success'])): ?>
-                    <div class="alert alert-success">
-                        <?php echo htmlspecialchars($_SESSION['flash_success']); unset($_SESSION['flash_success']); ?>
-                    </div>
-                <?php endif; ?>
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Добавить новую поломку</h5>
-                    </div>
-                    <div class="card-body">
-                        <form method="POST" action="../controllers/defects.controller.php">
-                            <div class="mb-3">
-                                <label for="description" class="form-label">Описание проблемы</label>
-                                <textarea class="form-control" 
-                                          id="description" 
-                                          name="description" 
-                                          rows="3" 
-                                          placeholder="..."
-                                          required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Добавить дефект</button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header bg-secondary text-white">
-                        <h5 class="mb-0">Список поломок</h5>
-                    </div>
-                    <div class="card-body">
-                        
-                        <?php if (count($defects) == 0): ?>
-                            <div class="alert alert-info">
-                            Пока нет ни одной поломки.
-                            </div>
-                        <?php else: ?>
-                            <div class="list-group">
-                                <?php foreach ($defects as $defect): ?>
-                                    <div class="list-group-item">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <strong> Дефект #<?php echo htmlspecialchars($defect['id']); ?></strong>
-                                            <small class="text-muted">
-                                                <?php 
-                                                    $date = date('d.m.Y H:i', strtotime($defect['created_at']));
-                                                    echo htmlspecialchars($date);
-                                                ?>
-                                            </small>
-                                        </div>
-                                        <p class="mt-2 mb-1">
-                                            <?php echo nl2br(htmlspecialchars($defect['description'])); ?>
-                                        </p>
-                                        <div>
-                                            <?php if ($defect['status'] == 'open'): ?>
-                                                <span class="badge bg-danger">Открыт</span>
-                                            <?php elseif ($defect['status'] == 'in_progress'): ?>
-                                                <span class="badge bg-warning">В работе</span>
-                                            <?php elseif ($defect['status'] == 'closed'): ?>
-                                                <span class="badge bg-success">Закрыт</span>
-                                            <?php else: ?>
-                                                <span class="badge bg-secondary"><?php echo htmlspecialchars($defect['status']); ?></span>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endif; ?>
-                        
-                    </div>
-                </div>
-                
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Учёт ЛВС</a>
+        <div class="collapse navbar-collapse">
+            <div class="navbar-nav">
+                <a class="nav-link" href="../controllers/defects.controller.php">Журнал поломок</a>
+                <a class="nav-link" href="../controllers/logout.controller.php">Выход</a>
             </div>
         </div>
     </div>
-    <footer class="d-flex flex-wrap justify-content-between align-items-center pt-3 mt-5 text-muted small border-top">
-        <div class="col-md-4 mb-0">© <?php echo date('Y'); ?> УЧЁТ ЛВС — система мониторинга сети</div>
-        <div class="col-md-4 d-flex justify-content-end">
-            <span>Журнал поломок</span>
-        </div>
-    </footer>
+</nav>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+
+            <h2>Журнал поломок</h2>
+
+            <?php if (isset($_SESSION['flash_error'])): ?>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <?= htmlspecialchars($_SESSION['flash_error']); unset($_SESSION['flash_error']); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['flash_success'])): ?>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <?= htmlspecialchars($_SESSION['flash_success']); unset($_SESSION['flash_success']); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
+            <!-- Форма добавления -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">Добавить поломку</div>
+                <div class="card-body">
+                    <form method="POST" action="">
+                        <input type="hidden" name="action" value="add">
+                        <textarea class="form-control" name="description" rows="3" placeholder="Опишите проблему..." required></textarea>
+                        <button type="submit" class="btn btn-primary mt-2">Добавить</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Форма редактирования (показывается только если есть editDefect) -->
+            <?php if (isset($editDefect) && $editDefect): ?>
+                <div class="card mb-4">
+                    <div class="card-header bg-warning text-dark">Редактирование дефекта #<?= $editDefect['id'] ?></div>
+                    <div class="card-body">
+                        <form method="POST" action="">
+                            <input type="hidden" name="action" value="edit">
+                            <input type="hidden" name="defect_id" value="<?= $editDefect['id'] ?>">
+
+                            <div class="mb-3">
+                                <label class="form-label">Описание</label>
+                                <textarea class="form-control" name="description" rows="3" required><?= htmlspecialchars($editDefect['description']) ?></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Статус</label>
+                                <select class="form-select" name="status">
+                                    <option value="open" <?= $editDefect['status'] == 'open' ? 'selected' : '' ?>>Открыт</option>
+                                    <option value="in_progress" <?= $editDefect['status'] == 'in_progress' ? 'selected' : '' ?>>В работе</option>
+                                    <option value="closed" <?= $editDefect['status'] == 'closed' ? 'selected' : '' ?>>Закрыт</option>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-warning">Сохранить изменения</button>
+                            <a href="defects.controller.php" class="btn btn-secondary">Отмена</a>
+                        </form>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <!-- Список поломок -->
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    Список поломок (<?= count($defects) ?>)
+                </div>
+                <div class="card-body">
+                    <?php if (count($defects) == 0): ?>
+                        <div class="alert alert-info">Нет зарегистрированных поломок</div>
+                    <?php else: ?>
+                        <?php foreach ($defects as $defect): ?>
+                            <div class="border rounded p-3 mb-3">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <strong>Дефект #<?= $defect['id'] ?></strong>
+                                        <br>
+                                        <small class="text-muted">Создан: <?= date('d.m.Y H:i', strtotime($defect['created_at'])) ?></small>
+                                    </div>
+                                    <div>
+                                        <?php if ($defect['status'] == 'open'): ?>
+                                            <span class="">Открыт</span>
+                                        <?php elseif ($defect['status'] == 'in_progress'): ?>
+                                            <span class="badge bg-warning text-dark">В работе</span>
+                                        <?php else: ?>
+                                            <span class="badge bg-success">Закрыт</span>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+
+                                <p class="mt-3 mb-3"><?= htmlspecialchars($defect['description']) ?></p>
+
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a href="?edit_id=<?= $defect['id'] ?>" class="btn btn-warning btn-sm"> Изменить</a>
+                                    <a href="?delete_id=<?= $defect['id'] ?>"
+                                       onclick="return confirm('Вы уверены, что хотите удалить дефект #<?= $defect['id'] ?>? Это действие нельзя отменить.')"
+                                       class="btn btn-danger btn-sm"> Удалить</a>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
