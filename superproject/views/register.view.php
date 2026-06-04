@@ -126,7 +126,7 @@ unset($_SESSION['old_login']);
         <hr>
         
         <div class="link">
-            Уже есть аккаунт? <a href="../cjntrollers/login.controller.php">Войти</a>
+            Уже есть аккаунт? <a href="../controllers/login.controller.php">Войти</a>
         </div>
     </div>
 </body>
