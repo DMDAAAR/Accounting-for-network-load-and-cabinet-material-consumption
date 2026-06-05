@@ -4,7 +4,7 @@ define('APP_LOADED', true);
 session_start();
 
 if (isset($_SESSION['user'])) {
-    header('Location: dashboard.controller.php');
+    header('Location: ../index.php');
     exit();
 }
 

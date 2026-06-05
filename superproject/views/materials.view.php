@@ -26,11 +26,11 @@ require '../controllers/materials.controller.php';
                     <button type="submit">Списать</button>
                 </form>
 
-                 <a href="../views/edit.material.view.php?id=<?= $material['id'] ?>">Редактировать</a>
+                <a href="../views/edit.material.view.php?id=<?= $material['id'] ?>">Редактировать</a>
 
                 <!-- Форма для удаления -->
-                 <form class="delete-form" method="POST" action="../controllers/delete.material.controller.php" 
-                      onsubmit="return confirm('Вы уверены, что хотите удалить материал «<?= htmlspecialchars($material['name']) ?>»?')">
+                <form class="delete-form" method="POST" action="../controllers/delete.material.controller.php" 
+                    onsubmit="return confirm('Вы уверены, что хотите удалить материал «<?= htmlspecialchars($material['name']) ?>»?')">
                     <input type="hidden" name="material_id" value="<?= $material['id'] ?>">
                     <button type="submit">Удалить</button>
                 </form>

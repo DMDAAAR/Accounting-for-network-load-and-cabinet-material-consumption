@@ -29,7 +29,7 @@ require_once '../db/connectDB.php';
             <select name="type" required>
                 <option value="">Выберите тип</option>
                 <option value="cable">Кабель (cable)</option>
-                <option value="connect">Коннектор (connector)</option>
+                <option value="connector">Коннектор (connector)</option>
                 <option value="socket">Розетка (socket)</option>
                 <option value="fastener">Крепеж (fastener)</option>
             </select>

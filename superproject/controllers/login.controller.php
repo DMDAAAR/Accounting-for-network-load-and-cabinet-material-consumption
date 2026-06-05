@@ -3,10 +3,10 @@ define('APP_LOADED', true);
 
 session_start();
 
-if (isset($_SESSION['user'])) {
-    header('Location: dashboard.controller.php');
-    exit();
-}
+// if (isset($_SESSION['user'])) {
+//     header('Location: ../index.php');
+//     exit();
+// }
 
 require '../db/connectDB.php';
 require '../models/user.model.php';
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'role' => $user['role']
         ];
         
-        exit();
+        exit(header('Location: ../index.php'));
     } else {
         $_SESSION['flash_error'] = 'Неверный логин или пароль';
         header('Location: login.controller.php');

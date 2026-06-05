@@ -6,57 +6,39 @@ function getRooms($pdo) {
 }
 //получить одну комнату по id
 function getRoomById($pdo, $id) {
-        $stmt = $pdo->prepare('SELECT * FROM locations WHERE id = :id');
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch();
-        }
-//удалить комнату по id
-// function deleteRoomById($pdo, $id) {
-//         $stmt = $pdo->prepare('DELETE FROM locations WHERE id = :id');
-//         $stmt->execute(['id' => $id]);
-//         }
+    $stmt = $pdo->prepare('SELECT * FROM locations WHERE id = :id');
+    $stmt->execute(['id' => $id]);
+    return $stmt->fetch();
+}
 
 //получить все точки сети
 function getStatsPoints($pdo) {
     $sql = "SELECT * FROM network_points";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute(); // <-- ОБЯЗАТЕЛЬНО ДОБАВЬТЕ ЭТУ СТРОКУ!
+    $stmt->execute();
     return $stmt->fetchAll();
 }
 //получить одну точку сети по id
 function getStatsPointById($pdo, $id) {
-        $sql = "SELECT * FROM network_points WHERE id = :id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch();
+    $sql = "SELECT * FROM network_points WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id' => $id]);
+    return $stmt->fetch();
 }
-//удалить точку сети по id
-// function deleteStatsPointById($pdo, $id) {
-//         $sql = "DELETE FROM network_points WHERE id = :id";
-//         $stmt = $pdo->prepare($sql);
-//         $stmt->execute(['id' => $id]);
-//         }
 
-
-
-
-//получить все открытые дефекты
 function getOpenDefects($pdo) {
     $sql = "SELECT * FROM defects WHERE status = 'open'";
     $stmt = $pdo->prepare($sql);
+    $stmt->execute();
     return $stmt->fetchAll();
 }
-//получить один дефект по id
 function getDefectById($pdo, $id) {
-        $sql = "SELECT * FROM defects WHERE id = :id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch();
+    $sql = "SELECT * FROM defects WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id' => $id]);
+    return $stmt->fetch();
 }
 
-
-
-//получить все материалы
 function getMaterialUsage($pdo) {
     $sql = "SELECT * FROM material_usage";
     $stmt = $pdo->prepare($sql);
@@ -64,7 +46,6 @@ function getMaterialUsage($pdo) {
     return $stmt->fetchAll();
 }
 
-//функция чтобы вытащить ID точки, её имя и реальное название кабинета/зоны.
 function getAllPoints($pdo){
     $sql = "
         SELECT 
@@ -86,7 +67,6 @@ function getAllPoints($pdo){
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-
 
 function getFilteredPoints(PDO $pdo, string $search, int $limit, int $offset): array
 {
@@ -140,8 +120,8 @@ function getTotalFilteredPoints(PDO $pdo, string $search): int
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     return (int) $stmt->fetchColumn();
-
 }
+
 function addNetworkPoint($pdo, $label, $type, $status, $location_id) {
     $sql = "INSERT INTO network_points (label, type, status, location_id, last_check) 
             VALUES (:label, :type, :status, :location_id, NOW())";
@@ -162,19 +142,19 @@ function deleteNetworkPointById($pdo, $id) {
 
 function updateNetworkPoint($pdo, $id, $label, $type, $status, $location_id) {
     $sql = "UPDATE network_points 
-            SET label = :label, type = :type, status = :status, location_id = :location_id 
+            SET label = :label, 
+                type = :type, 
+                status = :status, 
+                location_id = :location_id 
             WHERE id = :id";
+    
     $stmt = $pdo->prepare($sql);
+    
     return $stmt->execute([
         ':id'          => $id,
         ':label'       => $label,
         ':type'        => $type,
         ':status'      => $status,
-        ':location_id' => !empty($location_id) ? $location_id : null
+        ':location_id' => !empty($location_id) ? intval($location_id) : null
     ]);
-}
-function deleteNetworkPoint($pdo, $id) {
-    $sql = "DELETE FROM network_points WHERE id = :id";
-    $stmt = $pdo->prepare($sql);
-    return $stmt->execute([':id' => $id]);
 }

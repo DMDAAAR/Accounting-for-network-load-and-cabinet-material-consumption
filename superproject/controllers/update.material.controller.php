@@ -23,8 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = "Название не может быть пустым";
     } elseif (strlen($name) > 100) {
         $error = "Название не может быть длиннее 100 символов";
-    } elseif (!in_array($type, $validTypes)) {
-        $error = "Тип должен быть: cable, connect, socket, fastener";
     } elseif (!in_array($unit, $validUnits)) {
         $error = "Единица измерения должна быть: m или pcs";
     } elseif ($quantity < 0) {

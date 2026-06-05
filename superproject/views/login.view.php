@@ -97,23 +97,23 @@ unset($_SESSION['old_login']);
         
         <?php if (isset($_SESSION['flash_success'])): ?>
             <div class="success">
-                 ✓ <?php echo htmlspecialchars($_SESSION['flash_success']); unset($_SESSION['flash_success']); ?>
+                ✓ <?php echo htmlspecialchars($_SESSION['flash_success']); unset($_SESSION['flash_success']); ?>
             </div>
         <?php endif; ?>
         
         <form method="POST" action="../controllers/login.controller.php">
             <label>Логин</label>
             <input type="text" 
-                   name="login" 
-                   value="<?php echo htmlspecialchars($oldLogin); ?>" 
-                   placeholder="Введите логин"
-                   required>
+                name="login" 
+                value="<?php echo htmlspecialchars($oldLogin); ?>" 
+                placeholder="Введите логин"
+                required>
             
             <label>Пароль</label>
             <input type="password" 
-                   name="password" 
-                   placeholder="Введите пароль"
-                   required>
+                name="password" 
+                placeholder="Введите пароль"
+                required>
             
             <button type="submit">Войти</button>
         </form>
@@ -122,6 +122,9 @@ unset($_SESSION['old_login']);
         
         <div class="link">
             Нет аккаунта? <a href="../controllers/register.controller.php">Зарегистрироваться</a>
+        </div>
+                <div class="link">
+            На главную <a href="../index.php">Назад</a>
         </div>
     </div>
 </body>

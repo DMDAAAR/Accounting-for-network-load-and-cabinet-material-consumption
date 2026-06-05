@@ -128,6 +128,9 @@ unset($_SESSION['old_login']);
         <div class="link">
             Уже есть аккаунт? <a href="../controllers/login.controller.php">Войти</a>
         </div>
+        <div class="link">
+            На главную <a href="../superproject/index.php">Назад</a>
+        </div>
     </div>
 </body>
 </html>
