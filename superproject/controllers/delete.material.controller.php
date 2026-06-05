@@ -2,6 +2,9 @@
 
 require_once '../db/connectDB.php';
 require_once '../models/materials.model.php';
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/superproject/');
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_GET['id'])) {
     global $pdo;

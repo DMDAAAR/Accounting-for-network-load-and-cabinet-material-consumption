@@ -1,5 +1,8 @@
 <?php
 require '../controllers/materials.controller.php';
+
+include __DIR__ . '/components/header.view.php';
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -39,4 +42,5 @@ require '../controllers/materials.controller.php';
     </ul>
     <a href="../views/index.view.php">Вернуться на главную страницу</a>
 </body>
+<?php include __DIR__ . '/components/footer.view.php'; ?>
 </html>

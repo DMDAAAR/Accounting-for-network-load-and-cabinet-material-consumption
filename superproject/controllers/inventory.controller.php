@@ -6,6 +6,9 @@ if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
     header('Location: login.controller.php');
     exit();
 }
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/superproject/');
+}
 
 require_once '../db/connectDB.php';
 require_once '../models/inventory.model.php';

@@ -2,6 +2,8 @@
 if (!defined('APP_LOADED')) {
     die('Прямой доступ запрещен');
 }
+include __DIR__ . '/components/header.view.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -11,18 +13,6 @@ if (!defined('APP_LOADED')) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Учёт ЛВС</a>
-        <div class="collapse navbar-collapse">
-            <div class="navbar-nav">
-                <a class="nav-link" href="../controllers/defects.controller.php">Журнал поломок</a>
-                <a class="nav-link" href="../controllers/logout.controller.php">Выход</a>
-            </div>
-        </div>
-    </div>
-</nav>
 
 <div class="container mt-4">
     <div class="row">
@@ -134,4 +124,5 @@ if (!defined('APP_LOADED')) {
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+<?php include __DIR__ . '/components/footer.view.php'; ?>
 </html>

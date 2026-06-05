@@ -2,6 +2,9 @@
 require_once 'db/connectDB.php';
 require_once 'models/dashboard.model.php';
 
+define('APP_LOADED', true);
+define('BASE_URL', '/superproject/');
+
 dashboardIndex($pdo);
 $StatsPoints = getStatsPoints($pdo);
 
