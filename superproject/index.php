@@ -3,19 +3,14 @@ require_once 'db/connectDB.php';
 require_once 'models/dashboard.model.php';
 
 define('APP_LOADED', true);
-define('BASE_URL', '/superproject/');
+define('BASE_URL', '/');   // <-- исправлено
 
 dashboardIndex($pdo);
 $StatsPoints = getStatsPoints($pdo);
-
 $StatsPointsById = getStatsPointById($pdo, $_GET);
-
 $RoomById = getRoomById($pdo, $_GET);
-
 $OpenDefens = getOpenDefects($pdo);
-
 $MaterialUsage = getMaterialUsage($pdo);
-
 $DefectById = getDefectById($pdo, $_GET);
 
 function dashboardIndex(PDO $pdo): void
@@ -35,4 +30,3 @@ function dashboardIndex(PDO $pdo): void
 
     require  'views/index.view.php';
 }
-
