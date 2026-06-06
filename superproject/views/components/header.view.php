@@ -83,7 +83,7 @@ if (!defined('BASE_URL')) {
                     <a class="nav-link" href="<?= BASE_URL ?>controllers/defects.controller.php">Дефекты</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= BASE_URL ?>views/materials.view.php">Материалы</a>
+                    <a class="nav-link" href="<?= BASE_URL ?>controllers/materials.controller.php">Материалы</a>
                 </li>
                 <?php if (isset($_SESSION['user']) && ($_SESSION['user']['role'] ?? '') === 'admin'): ?>
                     <li class="nav-item">
