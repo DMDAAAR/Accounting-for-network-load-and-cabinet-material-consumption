@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Июн 06 2026 г., 13:58
+-- Время создания: Июн 07 2026 г., 01:41
 -- Версия сервера: 5.7.39
 -- Версия PHP: 7.4.30
 
@@ -34,8 +34,8 @@ CREATE TABLE `defects` (
   `category` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `severity` enum('high','medium','low') COLLATE utf8mb4_unicode_ci DEFAULT 'medium',
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` enum('open','in_progress','closed') COLLATE utf8mb4_unicode_ci DEFAULT 'open',
   `photo_path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('open','in_progress','closed') COLLATE utf8mb4_unicode_ci DEFAULT 'open',
   `created_by` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -44,8 +44,16 @@ CREATE TABLE `defects` (
 -- Дамп данных таблицы `defects`
 --
 
-INSERT INTO `defects` (`id`, `title`, `point_id`, `category`, `severity`, `description`, `status`, `photo_path`, `created_by`, `created_at`) VALUES
-(2, '2', 4, 'other', 'medium', '22', 'open', NULL, 1, '2026-06-06 10:53:37');
+INSERT INTO `defects` (`id`, `title`, `point_id`, `category`, `severity`, `description`, `photo_path`, `status`, `created_by`, `created_at`) VALUES
+(2, '2', 4, 'other', 'medium', '22', NULL, 'closed', 1, '2026-06-06 10:53:37'),
+(3, 'ваыаыв', 15, 'other', 'medium', 'ываываыв', NULL, 'closed', 1, '2026-06-06 19:32:06'),
+(4, 'ыаыаыаы', 15, 'other', 'medium', 'ываываывавыа', NULL, 'closed', 1, '2026-06-06 19:32:46'),
+(5, 'вфвфывы', 13, 'other', 'medium', 'фвыфвфы', NULL, 'closed', 1, '2026-06-06 19:32:49'),
+(6, 'чсячс', 15, 'other', 'medium', 'ясяс', NULL, 'closed', 1, '2026-06-06 19:33:50'),
+(7, 'аываыва', 7, 'other', 'medium', 'ываываыв', NULL, 'closed', 1, '2026-06-06 19:38:15'),
+(8, 'вфвф', 6, 'other', 'medium', 'вфывфыв', NULL, 'closed', 1, '2026-06-06 19:38:36'),
+(13, 'гаро', 1, 'other', 'medium', 'расширение территории', NULL, 'closed', 1, '2026-06-06 22:19:24'),
+(14, 'ыамвм', 14, 'other', 'medium', 'вмавм', '/superproject/uploads/defects/defect_6a24a1a144e71.jpg', 'open', 1, '2026-06-06 22:39:29');
 
 -- --------------------------------------------------------
 
@@ -86,6 +94,27 @@ CREATE TABLE `logs` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Дамп данных таблицы `logs`
+--
+
+INSERT INTO `logs` (`id`, `user_id`, `action`, `target_table`, `target_id`, `created_at`) VALUES
+(1, 1, 'Вошёл в систему', '', 0, '2026-06-06 21:19:14'),
+(2, 1, 'Добавил новый дефект', 'defects', 0, '2026-06-06 21:24:46'),
+(3, 1, 'Починил дефект #10 со списанием материалов', 'defects', 10, '2026-06-06 21:24:55'),
+(4, 1, 'Починил дефект #4 со списанием материалов', 'defects', 4, '2026-06-06 21:26:34'),
+(5, 1, 'Удалил дефект #10', 'defects', 10, '2026-06-06 21:27:36'),
+(6, 1, 'Вошёл в систему', '', 0, '2026-06-06 22:08:39'),
+(7, 1, 'Добавил новый дефект', 'defects', 0, '2026-06-06 22:17:07'),
+(8, 1, 'Удалил дефект #11', 'defects', 11, '2026-06-06 22:17:12'),
+(9, 1, 'Удалил дефект #9', 'defects', 9, '2026-06-06 22:17:14'),
+(10, 1, 'Добавил новый дефект', 'defects', 0, '2026-06-06 22:18:03'),
+(11, 1, 'Удалил дефект #12', 'defects', 12, '2026-06-06 22:18:23'),
+(12, 1, 'Добавил новый дефект', 'defects', 0, '2026-06-06 22:19:24'),
+(13, 1, 'Обновил дефект #13', 'defects', 13, '2026-06-06 22:20:11'),
+(14, 1, 'Починил дефект #13 со списанием материалов', 'defects', 13, '2026-06-06 22:22:53'),
+(15, 1, 'Добавил новый дефект', 'defects', 0, '2026-06-06 22:39:29');
+
 -- --------------------------------------------------------
 
 --
@@ -105,9 +134,9 @@ CREATE TABLE `materials` (
 --
 
 INSERT INTO `materials` (`id`, `name`, `type`, `unit`, `quantity`) VALUES
-(1, 'Кабель UTP 5e', 'cable', 'm', '980.00'),
-(2, 'Коннектор RJ45', 'connector', 'pcs', '499.00'),
-(3, 'Розетка RJ45', 'socket', 'pcs', '200.00');
+(1, 'Кабель UTP 5e', 'cable', 'm', '400.00'),
+(2, 'Коннектор RJ45', 'connector', 'pcs', '500.00'),
+(3, 'Розетка RJ45', 'socket', 'pcs', '500.00');
 
 -- --------------------------------------------------------
 
@@ -125,6 +154,22 @@ CREATE TABLE `material_usage` (
   `used_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `comment` text COLLATE utf8mb4_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `material_usage`
+--
+
+INSERT INTO `material_usage` (`id`, `material_id`, `quantity`, `point_id`, `defect_id`, `used_by`, `used_at`, `comment`) VALUES
+(1, 1, '200.00', NULL, NULL, 1, '2026-06-06 23:21:18', 'Списано при починке дефекта #9'),
+(2, 1, '700.00', NULL, 7, 1, '2026-06-06 23:41:35', 'Списано при починке дефекта #7'),
+(3, 2, '400.00', NULL, 7, 1, '2026-06-06 23:41:35', 'Списано при починке дефекта #7'),
+(4, 3, '199.00', NULL, 7, 1, '2026-06-06 23:41:35', 'Списано при починке дефекта #7'),
+(5, 1, '200.00', NULL, 5, 1, '2026-06-06 23:55:32', 'Списано при починке дефекта #5'),
+(6, 3, '300.00', NULL, 5, 1, '2026-06-06 23:55:32', 'Списано при починке дефекта #5'),
+(7, 2, '500.00', NULL, 5, 1, '2026-06-06 23:55:32', 'Списано при починке дефекта #5'),
+(8, 1, '200.00', NULL, NULL, 1, '2026-06-07 00:24:55', 'Списано при починке дефекта #10'),
+(9, 3, '200.00', NULL, 4, 1, '2026-06-07 00:26:34', 'Списано при починке дефекта #4'),
+(10, 1, '200.00', NULL, 13, 1, '2026-06-07 01:22:53', 'Списано при починке дефекта #13');
 
 -- --------------------------------------------------------
 
@@ -182,7 +227,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `login`, `password_hash`, `role`) VALUES
-(1, 'андо', '$2y$10$7xm7tnRCOg/GJ6bRtYJZ9.ggNwMKB/v4.4hBzCxL2GHRAe8iYrEEy', 'operator');
+(1, 'андо', '$2y$10$7xm7tnRCOg/GJ6bRtYJZ9.ggNwMKB/v4.4hBzCxL2GHRAe8iYrEEy', 'admin');
 
 --
 -- Индексы сохранённых таблиц
@@ -249,7 +294,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `defects`
 --
 ALTER TABLE `defects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT для таблицы `locations`
@@ -261,7 +306,7 @@ ALTER TABLE `locations`
 -- AUTO_INCREMENT для таблицы `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT для таблицы `materials`
@@ -273,7 +318,7 @@ ALTER TABLE `materials`
 -- AUTO_INCREMENT для таблицы `material_usage`
 --
 ALTER TABLE `material_usage`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT для таблицы `network_points`
