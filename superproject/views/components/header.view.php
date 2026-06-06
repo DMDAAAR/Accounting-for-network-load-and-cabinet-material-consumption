@@ -3,9 +3,9 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+// Базовая директория проекта — корень
 if (!defined('BASE_URL')) {
-    $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
-    define('BASE_URL', $base . '/');
+    define('BASE_URL', '/');
 }
 ?>
 <!DOCTYPE html>
@@ -58,14 +58,14 @@ if (!defined('BASE_URL')) {
 <body>
 <nav class="navbar navbar-expand-lg navbar-salad shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand" href="<?= BASE_URL ?>index.php"> Учёт ЛВС</a>
+        <a class="navbar-brand" href="<?= BASE_URL ?>index.php">📡 Учёт ЛВС</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSalad">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSalad">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="/superproject/index.php">Главная</a>
+                    <a class="nav-link" href="<?= BASE_URL ?>index.php">Главная</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= BASE_URL ?>controllers/inventory.controller.php">Оборудование</a>
@@ -74,12 +74,12 @@ if (!defined('BASE_URL')) {
                     <a class="nav-link" href="<?= BASE_URL ?>controllers/defects.controller.php">Дефекты</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= BASE_URL ?>controllers/useMaterial.controller.php">Материалы</a>
+                    <a class="nav-link" href="<?= BASE_URL ?>views/materials.view.php">Материалы</a>
                 </li>
                 <?php if (isset($_SESSION['user']) && ($_SESSION['user']['role'] ?? '') === 'admin'): ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= BASE_URL ?>controllers/logs.controller.php">Логи</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL ?>controllers/logs.controller.php">Логи</a>
+                    </li>
                 <?php endif; ?>
             </ul>
             <div class="d-flex">
