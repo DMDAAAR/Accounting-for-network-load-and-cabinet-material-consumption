@@ -7,7 +7,7 @@ if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
     exit();
 }
 if (!defined('BASE_URL')) {
-    define('BASE_URL', '/');
+    define('BASE_URL', '/superproject/');
 }
 
 require_once '../db/connectDB.php';

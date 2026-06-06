@@ -3,7 +3,7 @@ require_once 'db/connectDB.php';
 require_once 'models/dashboard.model.php';
 
 define('APP_LOADED', true);
-define('BASE_URL', '/');   // <-- исправлено
+define('BASE_URL', '/superproject/');   // <-- исправлено
 
 dashboardIndex($pdo);
 $StatsPoints = getStatsPoints($pdo);

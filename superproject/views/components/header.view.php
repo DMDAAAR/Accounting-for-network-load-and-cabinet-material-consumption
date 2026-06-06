@@ -5,7 +5,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 // Базовая директория проекта — корень
 if (!defined('BASE_URL')) {
-    define('BASE_URL', '/');
+    define('BASE_URL', '/superproject/');
 }
 ?>
 <!DOCTYPE html>
@@ -53,12 +53,21 @@ if (!defined('BASE_URL')) {
             font-weight: bold;
             border-bottom: 2px solid #2c5e2c;
         }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            flex: 1;
+        }
     </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-salad shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand" href="<?= BASE_URL ?>index.php">📡 Учёт ЛВС</a>
+        <a class="navbar-brand" href="<?= BASE_URL ?>index.php"> Учёт ЛВС</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSalad">
             <span class="navbar-toggler-icon"></span>
         </button>

@@ -1,8 +1,23 @@
-<footer class="d-flex flex-wrap justify-content-between align-items-center pt-3 mt-2 text-muted small">
-        <div class="col-md-4 mb-0">© <?= date('Y') ?> УЧЁТ ЛВС — система мониторинга сети</div>
-        <div class="col-md-4 d-flex justify-content-end">
-            <span><i class="bi bi-shield-check me-1"></i> Версия 1.0 | Все права защищены</span>
+<?php
+if (!defined('APP_LOADED')) die('Прямой доступ запрещен');
+?>
+<footer style="background-color: #f0fff0; border-top: 2px solid #90EE90; width: 100%; margin-top: auto;">
+    <div class="container-fluid px-3 px-md-5">
+        <div class="row align-items-center py-3 gy-2">
+            <div class="col-md-4 text-center text-md-start">
+                <span class="text-muted small">© <?= date('Y') ?> Учёт ЛВС — Кабинеты КИМРТ</span>
+            </div>
+            <div class="col-md-4 text-center">
+                <a href="https://github.com/DMDAAAR/Accounting-for-network-load-and-cabinet-material-consumption.git" target="_blank" class="text-decoration-none" style="color: #2c5e2c;">
+                    <i class="bi bi-github me-1"></i> GitHub репозиторий
+                </a>
+            </div>
+            <div class="col-md-4 text-center text-md-end">
+                <span class="text-muted small"><i class="bi bi-shield-check me-1"></i> Версия 1.0</span>
+            </div>
         </div>
-    </footer>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
