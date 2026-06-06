@@ -25,6 +25,13 @@ session_start();
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px;
         }
+        .defect-photo {
+            max-height: 150px;
+            max-width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body>
@@ -39,14 +46,14 @@ session_start();
     <?php endif; ?>
 
     <div class="row">
-        <!-- Форма: добавление + редактирование (совмещённый режим) -->
+        <!-- Форма: добавление + редактирование -->
         <div class="col-lg-4 mb-4">
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
                     <h5 class="mb-0"><?= isset($editableDefect) ? "Редактирование #{$editableDefect['id']}" : "Новый дефект" ?></h5>
                 </div>
                 <div class="card-body">
-                    <form method="POST">
+                    <form method="POST" enctype="multipart/form-data">
                         <?php if (isset($editableDefect)): ?>
                             <input type="hidden" name="id" value="<?= $editableDefect['id'] ?>">
                         <?php endif; ?>
@@ -73,7 +80,17 @@ session_start();
                             </select>
                         </div>
 
-                        <!-- Блок статуса – показываем ТОЛЬКО при редактировании -->
+                        <div class="mb-3">
+                            <label class="form-label">Фото (необязательно)</label>
+                            <input type="file" name="photo" class="form-control" accept="image/jpeg,image/png,image/gif,image/webp">
+                            <?php if (isset($editableDefect) && !empty($editableDefect['photo_path'])): ?>
+                                <div class="mt-2">
+                                    <img src="<?= htmlspecialchars($editableDefect['photo_path']) ?>" alt="Текущее фото" style="max-height: 100px; border-radius: 5px;">
+                                    <small class="text-muted d-block">Текущее фото</small>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
                         <?php if (isset($editableDefect)): ?>
                             <div class="mb-3">
                                 <label class="form-label">Статус</label>
@@ -94,7 +111,7 @@ session_start();
             </div>
         </div>
 
-        <!-- Список всех дефектов с кнопками "Изменить" и "Удалить" -->
+        <!-- Список дефектов -->
         <div class="col-lg-8">
             <h4 class="mb-3">Журнал дефектов <span class="badge bg-secondary"><?= count($defects) ?></span></h4>
             <?php if (empty($defects)): ?>
@@ -102,23 +119,10 @@ session_start();
             <?php else: ?>
                 <div class="grid-container">
                     <?php foreach ($defects as $d):
-                        // Определяем стили в зависимости от статуса (PHP 7-совместимо)
                         switch ($d['status']) {
-                            case 'open':
-                                $border = 'border-open';
-                                $badge = 'bg-danger';
-                                $statusText = 'Открыт';
-                                break;
-                            case 'in_progress':
-                                $border = 'border-progress';
-                                $badge = 'bg-warning text-dark';
-                                $statusText = 'В работе';
-                                break;
-                            default:
-                                $border = 'border-closed';
-                                $badge = 'bg-success';
-                                $statusText = 'Закрыт';
-                                break;
+                            case 'open': $border = 'border-open'; $badge = 'bg-danger'; $statusText = 'Открыт'; break;
+                            case 'in_progress': $border = 'border-progress'; $badge = 'bg-warning text-dark'; $statusText = 'В работе'; break;
+                            default: $border = 'border-closed'; $badge = 'bg-success'; $statusText = 'Закрыт'; break;
                         }
                         ?>
                         <div class="card defect-card shadow-sm <?= $border ?>">
@@ -127,6 +131,11 @@ session_start();
                                 <span class="badge <?= $badge ?>"><?= $statusText ?></span>
                             </div>
                             <div class="card-body">
+                                <?php if (!empty($d['photo_path'])): ?>
+                                    <div class="mb-2 text-center">
+                                        <img src="<?= htmlspecialchars($d['photo_path']) ?>" alt="Фото дефекта" class="defect-photo" onclick="window.open(this.src)">
+                                    </div>
+                                <?php endif; ?>
                                 <p class="mb-2"><?= nl2br(htmlspecialchars($d['description'])) ?></p>
                                 <small class="text-muted">
                                     <i class="bi bi-hdd-network"></i> Точка ID: <?= $d['point_id'] ?><br>
@@ -134,9 +143,10 @@ session_start();
                                 </small>
                             </div>
                             <div class="card-footer bg-white d-flex justify-content-end gap-2">
-                                <!-- Кнопка изменения – перезагружает страницу с ?edit_id= -->
                                 <a href="?edit_id=<?= $d['id'] ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i> Изменить</a>
-                                <!-- Кнопка удаления – отправляет POST с action=delete -->
+                                <?php if ($d['status'] !== 'closed'): ?>
+                                    <a href="defects.controller.php?fix_id=<?= $d['id'] ?>" class="btn btn-sm btn-success"><i class="bi bi-wrench"></i> Починить</a>
+                                <?php endif; ?>
                                 <form method="POST" style="display:inline" onsubmit="return confirm('Удалить дефект?')">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="delete_id" value="<?= $d['id'] ?>">
