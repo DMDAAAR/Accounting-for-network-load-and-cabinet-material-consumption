@@ -14,6 +14,7 @@ if (!isset($_SESSION['user'])) {
 require_once '../db/connectDB.php';
 require_once '../models/defects.model.php';
 require_once '../models/inventory.model.php'; // для getStatsPoints()
+require_once '../models/logs.model.php';
 
 $userId = $_SESSION['user']['id'];
 
@@ -25,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $defect_id = (int)$_POST['delete_id'];
         if (deleteDefect($pdo, $defect_id)) {
             $_SESSION['flash_success'] = "Дефект #$defect_id удалён";
+            addLog($pdo, $userId, "Удалён дефект #$defect_id");
         } else {
             $_SESSION['flash_error'] = "Ошибка при удалении";
         }
@@ -54,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($error === null) {
             if (updateDefect($pdo, $id, $title, $description, $point_id, $status)) {
                 $_SESSION['flash_success'] = "Дефект #$id обновлён";
+                addLog($pdo, $userId, "Обновлён дефект #$id");
             } else {
                 $_SESSION['flash_error'] = "Ошибка при обновлении";
             }
@@ -65,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($error === null) {
             if (addDefect($pdo, $title, $description, $point_id, $userId)) {
                 $_SESSION['flash_success'] = "Дефект успешно добавлен!";
+                addLog($pdo, $userId, "Добавлен дефект");
             } else {
                 $_SESSION['flash_error'] = "Ошибка при добавлении";
             }

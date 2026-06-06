@@ -2,12 +2,13 @@
 
 require_once '../db/connectDB.php';
 require_once '../models/materials.model.php';
+require_once '../models/logs.model.php';
 if (!defined('BASE_URL')) {
     define('BASE_URL', '/superproject/');
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     global $pdo;
-    
+
     $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     $name = trim($_POST['name']);
     $type = trim($_POST['type']);
@@ -18,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $validUnits = ['m', 'pcs'];
 
     $error = null;
-    
+
     if (!$id || $id <= 0) {
         $error = "Неверный ID материала";
     } elseif (empty($name)) {
@@ -33,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($error === null) {
         updateMaterial($pdo, $id, $name, $type, $unit, $quantity);
+        addLog($pdo, $_SESSION['user']['id'], "Обновил материал: $name", 'materials', $id);
         header("Location: ../views/materials.view.php?update_success=1");
         exit;
     } else {
