@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $defect_id = (int)$_POST['delete_id'];
         if (deleteDefect($pdo, $defect_id)) {
             $_SESSION['flash_success'] = "Дефект #$defect_id удалён";
-            addLog($pdo, $userId, "Удалён дефект #$defect_id");
+            addLog($pdo, $userId, 'Удалён д...', '', 0);
         } else {
             $_SESSION['flash_error'] = "Ошибка при удалении";
         }
