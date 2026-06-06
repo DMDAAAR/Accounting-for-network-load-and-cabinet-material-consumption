@@ -3,43 +3,60 @@
 function getMaterials($pdo){
     $sql = "SELECT * FROM materials";
     $stmt = $pdo->prepare($sql);
-    $stmt -> execute();
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getAllMaterials($pdo) {
+    $sql = "SELECT * FROM materials ORDER BY name";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function useMaterials($pdo, $material_id, $quantity) {
-    // Проверяем, что количество положительное
     if ($quantity <= 0) {
-        return false; // Возвращаем false для некорректного ввода
+        return false;
     }
 
-    // Шаг 1: Получаем текущий остаток материала из базы
     $stmt = $pdo->prepare("SELECT quantity FROM materials WHERE id = :id");
     $stmt->execute(['id' => $material_id]);
     $material = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Если материал не найден
     if (!$material) {
         return false;
     }
 
     $current_quantity = $material['quantity'];
 
-    // Шаг 2: Сравниваем запрошенное количество с текущим остатком
     if ($quantity > $current_quantity) {
-        // Недостаточно материалов! Не выполняем запрос к БД.
         return false;
     }
 
-    // Шаг 3: Если остатка достаточно - выполняем списание
     $sql = "UPDATE materials SET quantity = quantity - :quantity WHERE id = :material_id";
     $stmt = $pdo->prepare($sql);
-    $stmt -> execute([
+    return $stmt->execute([
         ':quantity' => $quantity,
         ':material_id' => $material_id
     ]);
+}
 
-    return true; // Успешно списали
+function useMaterialsForDefect($pdo, $material_id, $quantity, $defect_id, $user_id) {
+    $success = useMaterials($pdo, $material_id, $quantity);
+    if (!$success) {
+        return false;
+    }
+
+    $sql = "INSERT INTO material_usage (material_id, quantity, defect_id, used_by, used_at, comment)
+            VALUES (:material_id, :quantity, :defect_id, :used_by, NOW(), :comment)";
+    $stmt = $pdo->prepare($sql);
+    return $stmt->execute([
+        ':material_id' => $material_id,
+        ':quantity'    => $quantity,
+        ':defect_id'   => $defect_id,
+        ':used_by'     => $user_id,
+        ':comment'     => 'Списано при починке дефекта #' . $defect_id
+    ]);
 }
 
 function insertMaterial($pdo, $name, $type, $unit, $quantity){
@@ -77,4 +94,3 @@ function updateMaterial($pdo, $id, $name, $type, $unit, $quantity){
     ]);
     return $stmt->rowCount();
 }
-?>
