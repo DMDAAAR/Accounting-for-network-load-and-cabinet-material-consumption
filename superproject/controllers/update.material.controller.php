@@ -3,7 +3,7 @@
 require_once '../db/connectDB.php';
 require_once '../models/materials.model.php';
 if (!defined('BASE_URL')) {
-    define('BASE_URL', '/superproject/');
+    define('BASE_URL', '/');
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     global $pdo;

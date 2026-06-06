@@ -1,7 +1,7 @@
 <?php
 define('APP_LOADED', true);
 if (!defined('BASE_URL')) {
-    define('BASE_URL', '/superproject/');
+    define('BASE_URL', '/');
 }
 session_start();
 
