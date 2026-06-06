@@ -1,6 +1,7 @@
 <?php
 require '../db/connectDB.php';
 require '../models/materials.model.php';
+require '../models/logs.model.php';
 session_start();
 
 $material_id = $_POST['material_id'] ?? null;

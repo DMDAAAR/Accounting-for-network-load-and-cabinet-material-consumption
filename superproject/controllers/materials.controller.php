@@ -7,6 +7,7 @@ session_start();
 
 require_once '../db/connectDB.php';
 require_once '../models/materials.model.php';
+require_once '../models/logs.model.php';
 
 // Обработка POST (добавление, обновление, удаление)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -15,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $material_id = (int)$_POST['delete_id'];
         if (deleteMaterial($pdo, $material_id)) {
             $_SESSION['flash_success'] = "Материал #$material_id удалён";
+            addLog($pdo, $_SESSION['user']['id'], "Удалил материал #$material_id", 'materials', $material_id);
         } else {
             $_SESSION['flash_error'] = "Ошибка при удалении";
         }
@@ -48,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($id) {
 
             $rows = updateMaterial($pdo, $id, $name, $type, $unit, $quantity);
+            addLog($pdo, $_SESSION['user']['id'], "Обновил материал: $name", 'materials', $id);
             if ($rows !== false) {
                 $_SESSION['flash_success'] = "Материал #$id обновлён";
             } else {

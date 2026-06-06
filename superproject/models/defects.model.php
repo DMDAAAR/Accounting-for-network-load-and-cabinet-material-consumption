@@ -41,7 +41,7 @@ function addDefect($pdo, $title, $description, $point_id, $created_by) {
     $photo_path = null;
     $status = 'open';
 
-    $sql = "INSERT INTO defects (title, point_id, category, severity, description, photo_path, created_by, status, created_at) 
+    $sql = "INSERT INTO defects (title, point_id, category, severity, description, photo_path, created_by, status, created_at)
             VALUES (:title, :point_id, :category, :severity, :description, :photo_path, :created_by, :status, NOW())";
     $stmt = $pdo->prepare($sql);
     return $stmt->execute([
@@ -67,11 +67,11 @@ function addDefect($pdo, $title, $description, $point_id, $created_by) {
  * @return bool
  */
 function updateDefect($pdo, $id, $title, $description, $point_id, $status) {
-    $sql = "UPDATE defects 
-            SET title = :title, 
-                description = :description, 
-                point_id = :point_id, 
-                status = :status 
+    $sql = "UPDATE defects
+            SET title = :title,
+                description = :description,
+                point_id = :point_id,
+                status = :status
             WHERE id = :id";
     $stmt = $pdo->prepare($sql);
     return $stmt->execute([
