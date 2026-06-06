@@ -85,47 +85,47 @@ unset($_SESSION['old_login']);
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Вход в систему</h2>
-        <p style="text-align: center; color: #666;">Кабинет 319Б</p>
-        
-        <?php if (isset($_SESSION['flash_error'])): ?>
-            <div class="error">
-                × <?php echo htmlspecialchars($_SESSION['flash_error']); unset($_SESSION['flash_error']); ?>
-            </div>
-        <?php endif; ?>
-        
-        <?php if (isset($_SESSION['flash_success'])): ?>
-            <div class="success">
-                ✓ <?php echo htmlspecialchars($_SESSION['flash_success']); unset($_SESSION['flash_success']); ?>
-            </div>
-        <?php endif; ?>
-        
-        <form method="POST" action="../controllers/login.controller.php">
-            <label>Логин</label>
-            <input type="text" 
-                name="login" 
-                value="<?php echo htmlspecialchars($oldLogin); ?>" 
-                placeholder="Введите логин"
-                required>
-            
-            <label>Пароль</label>
-            <input type="password" 
-                name="password" 
-                placeholder="Введите пароль"
-                required>
-            
-            <button type="submit">Войти</button>
-        </form>
-        
-        <hr>
-        
-        <div class="link">
-            Нет аккаунта? <a href="../controllers/register.controller.php">Зарегистрироваться</a>
+<div class="container">
+    <h2>Вход в систему</h2>
+    <p style="text-align: center; color: #666;">Кабинет 319Б</p>
+
+    <?php if (isset($_SESSION['flash_error'])): ?>
+        <div class="error">
+            × <?php echo htmlspecialchars($_SESSION['flash_error']); unset($_SESSION['flash_error']); ?>
         </div>
-                <div class="link">
-            На главную <a href="../index.php">Назад</a>
+    <?php endif; ?>
+
+    <?php if (isset($_SESSION['flash_success'])): ?>
+        <div class="success">
+            ✓ <?php echo htmlspecialchars($_SESSION['flash_success']); unset($_SESSION['flash_success']); ?>
         </div>
+    <?php endif; ?>
+
+    <form method="POST" action="../controllers/login.controller.php">
+        <label>Логин</label>
+        <input type="text"
+               name="login"
+               value="<?php echo htmlspecialchars($oldLogin); ?>"
+               placeholder="Введите логин"
+               required>
+
+        <label>Пароль</label>
+        <input type="password"
+               name="password"
+               placeholder="Введите пароль"
+               required>
+
+        <button type="submit">Войти</button>
+    </form>
+
+    <hr>
+
+    <div class="link">
+        Нет аккаунта? <a href="../controllers/register.controller.php">Зарегистрироваться</a>
     </div>
+    <div class="link">
+        На главную <a href="/index.php">Назад</a>   <!-- исправлено -->
+    </div>
+</div>
 </body>
 </html>
