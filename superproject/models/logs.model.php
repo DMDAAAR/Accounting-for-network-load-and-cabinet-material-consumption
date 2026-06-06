@@ -35,18 +35,23 @@ function getLogById($pdo, $id) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-function addLog($pdo, $user_id, $action_text, $target_table = null, $target_id = null)
+function addLog($pdo, $user_id, $action_text, $target_table, $target_id)
 {
-    $stmt = $pdo->prepare("
-        INSERT INTO `logs` (`user_id`, `action_text`, `target_table`, `target_id`, `created_at`)
-        VALUES (:user_id, :action_text, :target_table, :target_id, NOW())
-    ");
-    $stmt->execute([
-        ':user_id' => $user_id,
-        ':action_text' => $action_text,
-        ':target_table' => $target_table,
-        ':target_id' => $target_id
-    ]);
-}
+    $target_table = $target_table === null ? '' : $target_table;
+    $target_id = $target_id === null ? 0 : $target_id;
 
+   $sql = "INSERT INTO `logs` (`user_id`, `action`, `target_table`, `target_id`, `created_at`)
+        VALUES (?, ?, ?, ?, NOW())";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute([
+        $user_id,
+        $action_text,
+        $target_table,
+        $target_id
+    ]);
+
+    return $stmt->rowCount() > 0;
+}
 ?>

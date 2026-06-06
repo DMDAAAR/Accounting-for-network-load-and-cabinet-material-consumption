@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'login' => $user['login'],
             'role' => $user['role']
         ];
-        addLog($pdo, $user['id'], 'Вошёл в систему', null, null);
+        addLog($pdo, '1', 'Вошёл в систему', '', 0);
 
         exit(header('Location: ../index.php'));
     } else {
