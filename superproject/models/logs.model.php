@@ -54,4 +54,14 @@ function addLog($pdo, $user_id, $action_text, $target_table, $target_id)
 
     return $stmt->rowCount() > 0;
 }
+
+    function getLogs($pdo) {
+    $sql = "SELECT logs.id AS id, users.login AS name,`action`,`created_at`,`action_text`
+            FROM logs
+            LEFT JOIN users ON logs.user_id = users.id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+$logs = getLogs($pdo);
 ?>

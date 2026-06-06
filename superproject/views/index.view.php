@@ -1,7 +1,7 @@
-<?php 
-$page = $page ?? 1; 
-
-include __DIR__ . '/components/header.view.php'; 
+<?php
+$page = $page ?? 1;
+require './models/logs.model.php';
+include __DIR__ . '/components/header.view.php';
 ?>
 
 <div class="container-fluid mt-4">
@@ -16,7 +16,7 @@ include __DIR__ . '/components/header.view.php';
         .table-hover tbody tr:hover { background-color: rgba(90, 255, 90, 0.2); }
         .card-body { background-color: #fff; }
     </style>
-    
+
     <div class="mb-4">
         <form action="" method="get" class="input-group">
             <input type="text" name="search" class="form-control" placeholder="Поиск по точкам..." value="<?= htmlspecialchars($search ?? '') ?>">
@@ -83,7 +83,7 @@ include __DIR__ . '/components/header.view.php';
 
 
     <h2 class="mb-3 border-top pt-4">Последние действия (История)</h2>
-    
+
     <?php if (!empty($logs)): ?>
         <div class="card mb-4 shadow-sm">
             <div class="card-body p-0">
@@ -101,10 +101,10 @@ include __DIR__ . '/components/header.view.php';
                             <?php foreach ($logs as $log): ?>
                                 <tr>
                                     <td><?= htmlspecialchars($log['created_at']) ?></td>
-                                    <td><strong><?= htmlspecialchars($log['login'] ?? 'Система') ?></strong></td>
-                                    
-                                    <td><?= htmlspecialchars(mb_strimwidth($log['action_text'], 0, 50, '...')) ?></td>
-                                    
+                                    <td><strong><?= htmlspecialchars($log['name'] ) ?></strong></td>
+
+                                    <td><?= htmlspecialchars(mb_strimwidth($log['action'], 0, 50, '...')) ?></td>
+
                                     <td class="text-end">
                                         <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#logModal<?= $log['id'] ?>">
                                             Подробнее
@@ -121,7 +121,7 @@ include __DIR__ . '/components/header.view.php';
                                             </div>
                                             <div class="modal-body">
                                                 <p><strong>Дата и время:</strong> <?= htmlspecialchars($log['created_at']) ?></p>
-                                                <p><strong>Пользователь:</strong> <?= htmlspecialchars($log['login'] ?? 'Система') ?></p>
+                                                <p><strong>Пользователь:</strong> <?= htmlspecialchars($log['name'] ?? 'Система') ?></p>
                                                 <p><strong>Затронутый объект (таблица):</strong> <?= htmlspecialchars($log['target_table'] ?? '—') ?> (ID: <?= htmlspecialchars($log['target_id'] ?? '—') ?>)</p>
                                                 <hr>
                                                 <p><strong>Полное описание:</strong></p>
