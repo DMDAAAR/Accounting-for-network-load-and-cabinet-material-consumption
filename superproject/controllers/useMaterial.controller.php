@@ -16,5 +16,5 @@ if ($material_id && is_numeric($quantity)) {
     }
 }
 
-header("Location: ../views/materials.view.php");
+header("Location: materials.controller.php");
 exit();
