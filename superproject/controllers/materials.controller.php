@@ -9,7 +9,6 @@ require_once '../db/connectDB.php';
 require_once '../models/materials.model.php';
 require_once '../models/logs.model.php';
 
-// Обработка POST (добавление, обновление, удаление)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Удаление
     if (isset($_POST['action']) && $_POST['action'] === 'delete' && isset($_POST['delete_id'])) {
