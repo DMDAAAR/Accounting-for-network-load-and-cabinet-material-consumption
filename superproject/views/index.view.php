@@ -80,8 +80,10 @@ include __DIR__ . '/components/header.view.php';
     <?php else: ?>
         <div class="alert alert-info mt-4 mb-5">Точки сети не найдены.</div>
     <?php endif; ?>
+</div>
 
-    <?php if (isset($_SESSION['user']) && ($_SESSION['user']['role'] ?? '') === 'admin'): ?>
+<?php if (isset($_SESSION['user']) && ($_SESSION['user']['role'] ?? '') === 'admin'): ?>
+<div class="container-fluid mt-4">
     <h2 class="mb-3 border-top pt-4">Последние действия (История)</h2>
 
     <?php if (!empty($logs)): ?>

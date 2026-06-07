@@ -5,6 +5,11 @@ if (!defined('BASE_URL')) {
 }
 session_start();
 
+if (!isset($_SESSION['user'])) {
+    header('Location: login.controller.php');
+    exit();
+}
+
 require_once '../db/connectDB.php';
 require_once '../models/materials.model.php';
 require_once '../models/logs.model.php';
