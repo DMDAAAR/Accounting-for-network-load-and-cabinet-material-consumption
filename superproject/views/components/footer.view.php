@@ -1,8 +1,11 @@
 <?php
 if (!defined('APP_LOADED')) die('Прямой доступ запрещен');
 ?>
-<footer style="background-color: #f0fff0; border-top: 2px solid #90EE90; width: 100vw; position: relative; left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; margin-top: auto;">    <div class="container-fluid px-3 px-md-5">
-        <div class="row align-items-center py-3 gy-2">
+</div> 
+
+<footer class="mt-auto py-3" style="background-color: #f0fff0; border-top: 2px solid #90EE90; width: 100%;">
+    <div class="container-fluid px-3 px-md-5">
+        <div class="row align-items-center gy-2">
             <div class="col-md-4 text-center text-md-start">
                 <span class="text-muted small">© <?= date('Y') ?> Учёт ЛВС — Кабинеты КИМРТ</span>
             </div>

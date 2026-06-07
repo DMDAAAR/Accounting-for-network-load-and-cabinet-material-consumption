@@ -1,9 +1,7 @@
 <?php
-
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// Базовая директория проекта — корень
 if (!defined('BASE_URL')) {
     define('BASE_URL', '/superproject/');
 }
@@ -84,6 +82,9 @@ if (!defined('BASE_URL')) {
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= BASE_URL ?>controllers/materials.controller.php">Материалы</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= BASE_URL ?>controllers/report.controller.php">Отчёты</a>
                 </li>
                 <?php if (isset($_SESSION['user']) && ($_SESSION['user']['role'] ?? '') === 'admin'): ?>
                     <li class="nav-item">

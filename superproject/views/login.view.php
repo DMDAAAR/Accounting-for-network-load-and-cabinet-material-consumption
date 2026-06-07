@@ -124,7 +124,7 @@ unset($_SESSION['old_login']);
         Нет аккаунта? <a href="../controllers/register.controller.php">Зарегистрироваться</a>
     </div>
     <div class="link">
-        На главную <a href="/index.php">Назад</a>   <!-- исправлено -->
+        На главную <a href="<?= BASE_URL ?>index.php">Назад</a>   <!-- исправлено -->
     </div>
 </div>
 </body>
