@@ -81,7 +81,7 @@ include __DIR__ . '/components/header.view.php';
         <div class="alert alert-info mt-4 mb-5">Точки сети не найдены.</div>
     <?php endif; ?>
 
-
+    <?php if (isset($_SESSION['user']) && ($_SESSION['user']['role'] ?? '') === 'admin'): ?>
     <h2 class="mb-3 border-top pt-4">Последние действия (История)</h2>
 
     <?php if (!empty($logs)): ?>
@@ -124,10 +124,6 @@ include __DIR__ . '/components/header.view.php';
                                                 <p><strong>Пользователь:</strong> <?= htmlspecialchars($log['name'] ?? 'Система') ?></p>
                                                 <p><strong>Затронутый объект (таблица):</strong> <?= htmlspecialchars($log['target_table'] ?? '—') ?> (ID: <?= htmlspecialchars($log['target_id'] ?? '—') ?>)</p>
                                                 <hr>
-                                                <p><strong>Полное описание:</strong></p>
-                                                <div class="alert alert-light border">
-                                                    <?= htmlspecialchars($log['action_text']) ?>
-                                                </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
@@ -161,7 +157,7 @@ include __DIR__ . '/components/header.view.php';
         <div class="alert alert-secondary mt-3">История действий пока пуста.</div>
     <?php endif; ?>
 </div>
-
+    <?php endif; ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <?php include __DIR__ . '/components/footer.view.php'; ?>
