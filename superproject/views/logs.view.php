@@ -16,8 +16,8 @@ if (!defined('BASE_URL')) {
 </head>
 <body>
 
-<?php 
-include __DIR__ . '/components/header.view.php'; 
+<?php
+include __DIR__ . '/components/header.view.php';
 ?>
 
 <div class="container mt-4">
@@ -29,34 +29,34 @@ include __DIR__ . '/components/header.view.php';
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Пользователь</th>
-                        <th>Действие</th>
-                        <th>Таблица</th>
-                        <th>ID записи</th>
-                        <th>Дата</th>
-                    </tr>
+                <tr>
+                    <th>ID</th>
+                    <th>Пользователь</th>
+                    <th>Действие</th>
+                    <th>Таблица</th>
+                    <th>ID записи</th>
+                    <th>Дата</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($logs as $log): ?>
-                        <tr>
-                            <td><?= $log['id'] ?></td>
-                            <td><?= $log['name'] ?? 'Система' ?></td>
-                            <td><?= htmlspecialchars($log['action']) ?></td>
-                            <td><?= $log['target_table'] ?: '—' ?></td>
-                            <td><?= $log['target_id'] ?: '—' ?></td>
-                            <td><?= date('d.m.Y H:i:s', strtotime($log['created_at'])) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
+                <?php foreach ($logs as $log): ?>
+                    <tr>
+                        <td><?= $log['id'] ?></td>
+                        <td><?= htmlspecialchars($log['name'] ?? 'Система') ?></td>
+                        <td><?= htmlspecialchars($log['action']) ?></td>
+                        <td><?= htmlspecialchars($log['target_table'] ?: '—') ?></td>
+                        <td><?= $log['target_id'] ?: '—' ?></td>
+                        <td><?= date('d.m.Y H:i:s', strtotime($log['created_at'])) ?></td>
+                    </tr>
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
     <?php endif; ?>
 </div>
 
-<?php 
-include __DIR__ . '/components/footer.view.php'; 
+<?php
+include __DIR__ . '/components/footer.view.php';
 ?>
 </body>
 </html>

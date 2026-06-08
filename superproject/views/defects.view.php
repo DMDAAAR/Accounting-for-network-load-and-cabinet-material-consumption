@@ -9,7 +9,9 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <title>Дефекты ЛВС</title>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/defects.css">
 </head>
 <body>
 <?php include __DIR__ . '/components/header.view.php'; ?>
@@ -57,6 +59,25 @@ session_start();
                         </div>
 
                         <div class="mb-3">
+                            <label class="form-label">Категория</label>
+                            <select name="category" class="form-select">
+                                <option value="other" <?= (isset($editableDefect) && $editableDefect['category'] == 'other') ? 'selected' : '' ?>>Другое</option>
+                                <option value="network" <?= (isset($editableDefect) && $editableDefect['category'] == 'network') ? 'selected' : '' ?>>Сеть</option>
+                                <option value="power" <?= (isset($editableDefect) && $editableDefect['category'] == 'power') ? 'selected' : '' ?>>Электропитание</option>
+                                <option value="hardware" <?= (isset($editableDefect) && $editableDefect['category'] == 'hardware') ? 'selected' : '' ?>>Оборудование</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Критичность</label>
+                            <select name="severity" class="form-select">
+                                <option value="low" <?= (isset($editableDefect) && $editableDefect['severity'] == 'low') ? 'selected' : '' ?>>Низкая</option>
+                                <option value="medium" <?= (isset($editableDefect) && $editableDefect['severity'] == 'medium') ? 'selected' : '' ?>>Средняя</option>
+                                <option value="high" <?= (isset($editableDefect) && $editableDefect['severity'] == 'high') ? 'selected' : '' ?>>Высокая</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
                             <label class="form-label">Фото (необязательно)</label>
                             <input type="file" name="photo" class="form-control" accept="image/jpeg,image/png,image/gif,image/webp">
                             <?php if (isset($editableDefect) && !empty($editableDefect['photo_path'])): ?>
@@ -80,73 +101,77 @@ session_start();
 
                         <button type="submit" class="btn btn-primary w-100"><?= isset($editableDefect) ? "Сохранить" : "Добавить" ?></button>
                         <?php if (isset($editableDefect)): ?>
-                            <a href="../controllers/defects.controller.php" class="btn btn-secondary w-100 mt-2">Отмена</a>
+                            <a href="defects.controller.php" class="btn btn-secondary w-100 mt-2">Отмена</a>
                         <?php endif; ?>
                     </form>
                 </div>
             </div>
         </div>
-        
-<div class="col-lg-8">
-    <h4 class="mb-3">Журнал дефектов <span class="badge bg-secondary"><?= count($defects) ?></span></h4>
-    <?php if (empty($defects)): ?>
-        <div class="alert alert-info text-center">Дефектов пока нет</div>
-    <?php else: ?>
-        <div class="grid-container">
-            <?php foreach ($defects as $d):
-                switch ($d['status']) {
-                    case 'open': $border = 'border-open'; $badge = 'bg-danger'; $statusText = 'Открыт'; break;
-                    case 'in_progress': $border = 'border-progress'; $badge = 'bg-warning text-dark'; $statusText = 'В работе'; break;
-                    default: $border = 'border-closed'; $badge = 'bg-success'; $statusText = 'Закрыт'; break;
-                }
-                ?>
-                <div class="card defect-card shadow-sm <?= $border ?>">
-                    <div class="card-header bg-white d-flex justify-content-between">
-                        <strong>#<?= $d['id'] ?> – <?= htmlspecialchars($d['title']) ?></strong>
-                        <span class="badge <?= $badge ?>"><?= $statusText ?></span>
-                    </div>
-                    <div class="card-body">
-                        <?php if (!empty($d['photo_path'])): ?>
-                            <div class="mb-2 text-center">
-                                <img src="<?= htmlspecialchars($d['photo_path']) ?>" alt="Фото дефекта" class="defect-photo" onclick="window.open(this.src)">
+
+        <div class="col-lg-8">
+            <h4 class="mb-3">Журнал дефектов <span class="badge bg-secondary"><?= count($defects) ?></span></h4>
+            <?php if (empty($defects)): ?>
+                <div class="alert alert-info text-center">Дефектов пока нет</div>
+            <?php else: ?>
+                <div class="grid-container">
+                    <?php foreach ($defects as $d):
+                        switch ($d['status']) {
+                            case 'open': $border = 'border-open'; $badge = 'bg-danger'; $statusText = 'Открыт'; break;
+                            case 'in_progress': $border = 'border-progress'; $badge = 'bg-warning text-dark'; $statusText = 'В работе'; break;
+                            default: $border = 'border-closed'; $badge = 'bg-success'; $statusText = 'Закрыт'; break;
+                        }
+                        ?>
+                        <div class="card defect-card shadow-sm <?= $border ?>">
+                            <div class="card-header bg-white d-flex justify-content-between">
+                                <strong>#<?= $d['id'] ?> – <?= htmlspecialchars($d['title']) ?></strong>
+                                <span class="badge <?= $badge ?>"><?= $statusText ?></span>
                             </div>
-                        <?php endif; ?>
-                        <p class="mb-2"><?= nl2br(htmlspecialchars($d['description'])) ?></p>
-                        <small class="text-muted">
-                            <i class="bi bi-hdd-network"></i> Точка ID: <?= $d['point_id'] ?><br>
-                            <i class="bi bi-calendar3"></i> <?= date('d.m.Y H:i', strtotime($d['created_at'])) ?>
-                        </small>
-                        
-                        <?php if ($d['status'] == 'closed'): ?>
-                            <div class="mt-3 pt-2 border-top defect-materials-info">
-                                <strong>Материалы:</strong>
-                                <?php if (!empty($d['used_materials'])): ?>
-                                    <?php foreach ($d['used_materials'] as $material): ?>
-                                        <span class="defect-material-badge">
-                                            <?= htmlspecialchars($material['name']) ?>: <?= $material['quantity'] ?> <?= $material['unit'] ?>
-                                        </span>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <span style="color: #666;">не списывались</span>
+                            <div class="card-body">
+                                <?php if (!empty($d['photo_path'])): ?>
+                                    <div class="mb-2 text-center">
+                                        <img src="<?= htmlspecialchars($d['photo_path']) ?>" alt="Фото дефекта" class="defect-photo" onclick="window.open(this.src)">
+                                    </div>
+                                <?php endif; ?>
+                                <p class="mb-2"><?= nl2br(htmlspecialchars($d['description'])) ?></p>
+                                <small class="text-muted">
+                                    <i class="bi bi-tag"></i> Категория: <?= htmlspecialchars($d['category']) ?><br>
+                                    <i class="bi bi-exclamation-diamond"></i> Критичность: <?= htmlspecialchars($d['severity']) ?><br>
+                                    <i class="bi bi-hdd-network"></i> Точка ID: <?= $d['point_id'] ?><br>
+                                    <i class="bi bi-calendar3"></i> <?= date('d.m.Y H:i', strtotime($d['created_at'])) ?>
+                                </small>
+
+                                <?php if ($d['status'] == 'closed'): ?>
+                                    <div class="mt-3 pt-2 border-top defect-materials-info">
+                                        <strong>Материалы:</strong>
+                                        <?php if (!empty($d['used_materials'])): ?>
+                                            <?php foreach ($d['used_materials'] as $material): ?>
+                                                <span class="defect-material-badge">
+                                                    <?= htmlspecialchars($material['name']) ?>: <?= $material['quantity'] ?> <?= $material['unit'] ?>
+                                                </span>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <span style="color: #666;">не списывались</span>
+                                        <?php endif; ?>
+                                    </div>
                                 <?php endif; ?>
                             </div>
-                        <?php endif; ?>
-                    </div>
-                    <div class="card-footer bg-white d-flex justify-content-end gap-2">
-                        <a href="?edit_id=<?= $d['id'] ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i> Изменить</a>
-                        <?php if ($d['status'] !== 'closed'): ?>
-                            <a href="../controllers/defects.controller.php?fix_id=<?= $d['id'] ?>" class="btn btn-sm btn-success"><i class="bi bi-wrench"></i> Починить</a>
-                        <?php endif; ?>
-                        <form method="POST" style="display:inline" onsubmit="return confirm('Удалить дефект?')">
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="delete_id" value="<?= $d['id'] ?>">
-                            <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Удалить</button>
-                        </form>
-                    </div>
+                            <div class="card-footer bg-white d-flex justify-content-end gap-2">
+                                <a href="?edit_id=<?= $d['id'] ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i> Изменить</a>
+                                <?php if ($d['status'] !== 'closed'): ?>
+                                    <a href="defects.controller.php?fix_id=<?= $d['id'] ?>" class="btn btn-sm btn-success"><i class="bi bi-wrench"></i> Починить</a>
+                                <?php endif; ?>
+                                <form method="POST" style="display:inline" onsubmit="return confirm('Удалить дефект?')">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="delete_id" value="<?= $d['id'] ?>">
+                                    <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Удалить</button>
+                                </form>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
+            <?php endif; ?>
         </div>
-    <?php endif; ?>
+    </div>
 </div>
 
 <?php include __DIR__ . '/components/footer.view.php'; ?>
