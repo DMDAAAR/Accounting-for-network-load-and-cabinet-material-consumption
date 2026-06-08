@@ -10,7 +10,7 @@ if (!isset($_SESSION['user'])) {
 
 if ($_SESSION['user']['role'] !== 'admin') {
     $_SESSION['flash_error'] = 'Доступ запрещён. Только для администраторов.';
-    header('Location: ../controllers.index.controller.php');
+    header('Location: ../index.php');
     exit();
 }
 
