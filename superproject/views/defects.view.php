@@ -103,75 +103,73 @@ session_start();
 
                         <button type="submit" class="btn btn-primary w-100"><?= isset($editableDefect) ? "Сохранить" : "Добавить" ?></button>
                         <?php if (isset($editableDefect)): ?>
-                            <a href="defects.controller.php" class="btn btn-secondary w-100 mt-2">Отмена</a>
+                            <a href="../controllers/defects.controller.php" class="btn btn-secondary w-100 mt-2">Отмена</a>
                         <?php endif; ?>
                     </form>
                 </div>
             </div>
         </div>
-
-        <!-- Список дефектов -->
-        <div class="col-lg-8">
-            <h4 class="mb-3">Журнал дефектов <span class="badge bg-secondary"><?= count($defects) ?></span></h4>
-            <?php if (empty($defects)): ?>
-                <div class="alert alert-info text-center">Дефектов пока нет</div>
-            <?php else: ?>
-                <div class="grid-container">
-                    <?php foreach ($defects as $d):
-                        switch ($d['status']) {
-                            case 'open': $border = 'border-open'; $badge = 'bg-danger'; $statusText = 'Открыт'; break;
-                            case 'in_progress': $border = 'border-progress'; $badge = 'bg-warning text-dark'; $statusText = 'В работе'; break;
-                            default: $border = 'border-closed'; $badge = 'bg-success'; $statusText = 'Закрыт'; break;
-                        }
-                        ?>
-                        <div class="card defect-card shadow-sm <?= $border ?>">
-                            <div class="card-header bg-white d-flex justify-content-between">
-                                <strong>#<?= $d['id'] ?> – <?= htmlspecialchars($d['title']) ?></strong>
-                                <span class="badge <?= $badge ?>"><?= $statusText ?></span>
+        
+<div class="col-lg-8">
+    <h4 class="mb-3">Журнал дефектов <span class="badge bg-secondary"><?= count($defects) ?></span></h4>
+    <?php if (empty($defects)): ?>
+        <div class="alert alert-info text-center">Дефектов пока нет</div>
+    <?php else: ?>
+        <div class="grid-container">
+            <?php foreach ($defects as $d):
+                switch ($d['status']) {
+                    case 'open': $border = 'border-open'; $badge = 'bg-danger'; $statusText = 'Открыт'; break;
+                    case 'in_progress': $border = 'border-progress'; $badge = 'bg-warning text-dark'; $statusText = 'В работе'; break;
+                    default: $border = 'border-closed'; $badge = 'bg-success'; $statusText = 'Закрыт'; break;
+                }
+                ?>
+                <div class="card defect-card shadow-sm <?= $border ?>">
+                    <div class="card-header bg-white d-flex justify-content-between">
+                        <strong>#<?= $d['id'] ?> – <?= htmlspecialchars($d['title']) ?></strong>
+                        <span class="badge <?= $badge ?>"><?= $statusText ?></span>
+                    </div>
+                    <div class="card-body">
+                        <?php if (!empty($d['photo_path'])): ?>
+                            <div class="mb-2 text-center">
+                                <img src="<?= htmlspecialchars($d['photo_path']) ?>" alt="Фото дефекта" class="defect-photo" onclick="window.open(this.src)">
                             </div>
-                            <div class="card-body">
-                                <?php if (!empty($d['photo_path'])): ?>
-                                    <div class="mb-2 text-center">
-                                        <img src="<?= htmlspecialchars($d['photo_path']) ?>" alt="Фото дефекта" class="defect-photo" onclick="window.open(this.src)">
-                                    </div>
+                        <?php endif; ?>
+                        <p class="mb-2"><?= nl2br(htmlspecialchars($d['description'])) ?></p>
+                        <small class="text-muted">
+                            <i class="bi bi-hdd-network"></i> Точка ID: <?= $d['point_id'] ?><br>
+                            <i class="bi bi-calendar3"></i> <?= date('d.m.Y H:i', strtotime($d['created_at'])) ?>
+                        </small>
+                        
+                        <?php if ($d['status'] == 'closed'): ?>
+                            <div class="mt-3 pt-2 border-top" style="margin-top: 10px; padding-top: 8px; font-size: 13px;">
+                                <strong>Материалы:</strong>
+                                <?php if (!empty($d['used_materials'])): ?>
+                                    <?php foreach ($d['used_materials'] as $material): ?>
+                                        <span style="background: #e9ecef; padding: 2px 8px; border-radius: 12px; margin-right: 5px; display: inline-block; margin-top: 5px;">
+                                            <?= htmlspecialchars($material['name']) ?>: <?= $material['quantity'] ?> <?= $material['unit'] ?>
+                                        </span>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <span style="color: #666;">не списывались</span>
                                 <?php endif; ?>
-                                <p class="mb-2"><?= nl2br(htmlspecialchars($d['description'])) ?></p>
-                                <small class="text-muted">
-                                    <i class="bi bi-hdd-network"></i> Точка ID: <?= $d['point_id'] ?><br>
-                                    <i class="bi bi-calendar3"></i> <?= date('d.m.Y H:i', strtotime($d['created_at'])) ?>
-                                </small>
                             </div>
-                            <div class="card-footer bg-white d-flex justify-content-end gap-2">
-                                <a href="?edit_id=<?= $d['id'] ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i> Изменить</a>
-                                <?php if ($d['status'] !== 'closed'): ?>
-                                    <a href="defects.controller.php?fix_id=<?= $d['id'] ?>" class="btn btn-sm btn-success"><i class="bi bi-wrench"></i> Починить</a>
-                                <?php endif; ?>
-                                <form method="POST" style="display:inline" onsubmit="return confirm('Удалить дефект?')">
-                                    <input type="hidden" name="action" value="delete">
-                                    <input type="hidden" name="delete_id" value="<?= $d['id'] ?>">
-                                    <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Удалить</button>
-                                </form>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-<?php if ($defect['status'] == 'closed'): ?>
-    <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #eee; font-size: 13px;">
-        <strong>Материалы:</strong>
-        <?php if (!empty($defect['used_materials'])): ?>
-            <?php foreach ($defect['used_materials'] as $material): ?>
-                <span style="background: #e9ecef; padding: 2px 8px; border-radius: 12px; margin-right: 5px;">
-                    <?= htmlspecialchars($material['name']) ?>: <?= $material['quantity'] ?> <?= $material['unit'] ?>
-                </span>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <span style="color: #666;">не списывались</span>
-        <?php endif; ?>
-    </div>
-<?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                    <div class="card-footer bg-white d-flex justify-content-end gap-2">
+                        <a href="?edit_id=<?= $d['id'] ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i> Изменить</a>
+                        <?php if ($d['status'] !== 'closed'): ?>
+                            <a href="../controllers/defects.controller.php?fix_id=<?= $d['id'] ?>" class="btn btn-sm btn-success"><i class="bi bi-wrench"></i> Починить</a>
+                        <?php endif; ?>
+                        <form method="POST" style="display:inline" onsubmit="return confirm('Удалить дефект?')">
+                            <input type="hidden" name="action" value="delete">
+                            <input type="hidden" name="delete_id" value="<?= $d['id'] ?>">
+                            <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Удалить</button>
+                        </form>
+                    </div>
                 </div>
-            <?php endif; ?>
+            <?php endforeach; ?>
         </div>
-    </div>
+    <?php endif; ?>
 </div>
 
 <?php include __DIR__ . '/components/footer.view.php'; ?>
