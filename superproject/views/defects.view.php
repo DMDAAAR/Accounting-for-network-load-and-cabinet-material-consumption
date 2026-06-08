@@ -46,7 +46,6 @@ session_start();
     <?php endif; ?>
 
     <div class="row">
-        <!-- Форма: добавление + редактирование -->
         <div class="col-lg-4 mb-4">
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
@@ -155,6 +154,20 @@ session_start();
                             </div>
                         </div>
                     <?php endforeach; ?>
+<?php if ($defect['status'] == 'closed'): ?>
+    <div style="margin-top: 10px; padding-top: 8px; border-top: 1px solid #eee; font-size: 13px;">
+        <strong>Материалы:</strong>
+        <?php if (!empty($defect['used_materials'])): ?>
+            <?php foreach ($defect['used_materials'] as $material): ?>
+                <span style="background: #e9ecef; padding: 2px 8px; border-radius: 12px; margin-right: 5px;">
+                    <?= htmlspecialchars($material['name']) ?>: <?= $material['quantity'] ?> <?= $material['unit'] ?>
+                </span>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <span style="color: #666;">не списывались</span>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
                 </div>
             <?php endif; ?>
         </div>

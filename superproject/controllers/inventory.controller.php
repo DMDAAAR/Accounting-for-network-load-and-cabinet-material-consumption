@@ -63,11 +63,9 @@ $edit_point = null;
 if (isset($_GET['edit_id'])) {
     $edit_id = intval($_GET['edit_id']);
     if ($edit_id > 0) {
-
         $edit_point = getStatsPointById($pdo, $edit_id);
     }
 }
-
 
 $sql = "SELECT network_points.*, locations.name AS location_name
         FROM network_points
@@ -76,6 +74,10 @@ $sql = "SELECT network_points.*, locations.name AS location_name
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $points = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($points as $key => $point) {
+    $points[$key]['materials'] = getMaterialsUsedForPoint($pdo, $point['id']);
+}
 
 $rooms = getRooms($pdo);
 

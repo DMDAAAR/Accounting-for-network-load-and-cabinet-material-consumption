@@ -64,3 +64,13 @@ function fixDefect($pdo, $id) {
     $stmt = $pdo->prepare($sql);
     return $stmt->execute([':id' => $id]);
 }
+function getMaterialsUsedForDefect($pdo, $defect_id) {
+    $sql = "SELECT mu.*, m.name, m.type, m.unit 
+            FROM material_usage mu
+            LEFT JOIN materials m ON mu.material_id = m.id
+            WHERE mu.defect_id = :defect_id
+            ORDER BY mu.used_at DESC";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':defect_id' => $defect_id]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}

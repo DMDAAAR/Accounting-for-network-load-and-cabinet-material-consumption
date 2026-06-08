@@ -83,6 +83,7 @@ include __DIR__ . '/components/header.view.php';
                 <th>Тип</th>
                 <th>Статус</th>
                 <th>Локация</th>
+                <th class="text-center">Материалы</th>
                 <th class="text-center">Действия</th>
             </tr>
         </thead>
@@ -104,6 +105,13 @@ include __DIR__ . '/components/header.view.php';
                         </span>
                     </td>
                     <td><?php echo htmlspecialchars($point['location_name'] ?? '—'); ?></td>
+                    
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-info text-white" data-bs-toggle="modal" data-bs-target="#materialsModal<?php echo $point['id']; ?>">
+                            Подробнее (<?php echo count($point['materials']); ?>)
+                        </button>
+                    </td>
+
                     <td class="text-center">
                         <a href="inventory.controller.php?edit_id=<?php echo $point['id']; ?>" 
                         class="btn btn-sm btn-warning">
@@ -120,12 +128,58 @@ include __DIR__ . '/components/header.view.php';
             <?php endforeach; ?>
         <?php else: ?>
             <tr>
-                <td colspan="6" class="text-center text-muted">Данные о точках сети отсутствуют или не переданы из контроллера</td>
+                <td colspan="7" class="text-center text-muted">Данные о точках сети отсутствуют или не переданы из контроллера</td>
             </tr>
         <?php endif; ?>
         </tbody>
     </table>
 </div>
+
+<?php if (isset($points) && is_array($points)): ?>
+    <?php foreach ($points as $point): ?>
+        <div class="modal fade" id="materialsModal<?php echo $point['id']; ?>" tabindex="-1" aria-labelledby="materialsModalLabel<?php echo $point['id']; ?>" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="materialsModalLabel<?php echo $point['id']; ?>">
+                            Расход материалов для: <?php echo htmlspecialchars($point['label']); ?>
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        <?php if (!empty($point['materials'])): ?>
+                            <table class="table table-bordered table-sm">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Название материала</th>
+                                        <th>Количество</th>
+                                        <th>Дата списания</th>
+                                        <th>Кто производил ремонт</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($point['materials'] as $mat): ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($mat['material_name']); ?></td>
+                                            <td><?php echo floatval($mat['quantity']) . ' ' . htmlspecialchars($mat['unit']); ?></td>
+                                            <td><?php echo date('d.m.Y H:i', strtotime($mat['used_at'])); ?></td>
+                                            <td><span class="badge bg-secondary"><?php echo htmlspecialchars($mat['user_name']); ?></span></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        <?php else: ?>
+                            <div class="alert alert-info mb-0">Материалы для обслуживания данной точки сети еще не списывались.</div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
 
 <?php 
 include __DIR__ . '/components/footer.view.php'; 

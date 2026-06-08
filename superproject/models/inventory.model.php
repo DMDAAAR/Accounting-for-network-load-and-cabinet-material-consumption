@@ -182,3 +182,30 @@ if (!function_exists('updateNetworkPoint')) {
         ]);
     }
 }
+
+if (!function_exists('getMaterialsUsedForPoint')) {
+    function getMaterialsUsedForPoint($pdo, $point_id) {
+        $sql = "
+            SELECT 
+                m.name AS material_name,
+                mu.quantity,
+                m.unit,
+                mu.used_at,
+                u.login AS user_name
+            FROM material_usage mu
+            JOIN materials m ON mu.material_id = m.id
+            JOIN users u ON mu.used_by = u.id
+            LEFT JOIN defects d ON mu.defect_id = d.id
+            WHERE mu.point_id = :point_id1 
+               OR (mu.defect_id IS NOT NULL AND d.point_id = :point_id2)
+            ORDER BY mu.used_at DESC
+        ";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':point_id1' => $point_id,
+            ':point_id2' => $point_id
+        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+}
