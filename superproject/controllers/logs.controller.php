@@ -17,6 +17,6 @@ if ($_SESSION['user']['role'] !== 'admin') {
 require_once '../db/connectDB.php';
 require_once '../models/logs.model.php';
 
-$logs = getAllLogs($pdo);
+$logs = getLogs($pdo);
 
 include '../views/logs.view.php';

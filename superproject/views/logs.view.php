@@ -16,7 +16,9 @@ if (!defined('BASE_URL')) {
 </head>
 <body>
 
-<?php include '/components/header.view.php'; ?>
+<?php 
+include __DIR__ . '/components/header.view.php'; 
+?>
 
 <div class="container mt-4">
     <h2>Журнал действий</h2>
@@ -53,6 +55,8 @@ if (!defined('BASE_URL')) {
     <?php endif; ?>
 </div>
 
-<?php include '/components/footer.view.php'; ?>
+<?php 
+include __DIR__ . '/components/footer.view.php'; 
+?>
 </body>
 </html>
