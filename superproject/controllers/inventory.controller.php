@@ -17,7 +17,7 @@ if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
 require_once '../db/connectDB.php';
 require_once '../models/inventory.model.php';
 require_once '../models/logs.model.php';
-// ... остальной код ...
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['action']) && $_POST['action'] === 'add') {
         $label = trim($_POST['label'] ?? '');
