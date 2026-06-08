@@ -9,30 +9,7 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <title>Дефекты ЛВС</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style>
-        .defect-card {
-            transition: 0.2s;
-            border-left: 4px solid;
-            margin-bottom: 20px;
-        }
-        .border-open { border-left-color: #dc3545; }
-        .border-progress { border-left-color: #ffc107; }
-        .border-closed { border-left-color: #198754; }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
-        }
-        .defect-photo {
-            max-height: 150px;
-            max-width: 100%;
-            border-radius: 8px;
-            cursor: pointer;
-            object-fit: contain;
-        }
-    </style>
+
 </head>
 <body>
 <?php include __DIR__ . '/components/header.view.php'; ?>
@@ -141,11 +118,11 @@ session_start();
                         </small>
                         
                         <?php if ($d['status'] == 'closed'): ?>
-                            <div class="mt-3 pt-2 border-top" style="margin-top: 10px; padding-top: 8px; font-size: 13px;">
+                            <div class="mt-3 pt-2 border-top defect-materials-info">
                                 <strong>Материалы:</strong>
                                 <?php if (!empty($d['used_materials'])): ?>
                                     <?php foreach ($d['used_materials'] as $material): ?>
-                                        <span style="background: #e9ecef; padding: 2px 8px; border-radius: 12px; margin-right: 5px; display: inline-block; margin-top: 5px;">
+                                        <span class="defect-material-badge">
                                             <?= htmlspecialchars($material['name']) ?>: <?= $material['quantity'] ?> <?= $material['unit'] ?>
                                         </span>
                                     <?php endforeach; ?>

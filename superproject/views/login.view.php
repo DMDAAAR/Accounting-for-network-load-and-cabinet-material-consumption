@@ -15,74 +15,7 @@ unset($_SESSION['old_login']);
     <meta charset="UTF-8">
     <title>Вход - Учёт ЛВС</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background: #f0f2f5;
-        }
-        .container {
-            max-width: 400px;
-            margin: 50px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        .error {
-            color: red;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: #ffe6e6;
-            border-radius: 5px;
-        }
-        .success {
-            color: green;
-            margin-bottom: 15px;
-            padding: 10px;
-            background: #e6ffe6;
-            border-radius: 5px;
-        }
-        .link {
-            text-align: center;
-            margin-top: 15px;
-        }
-        .link a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .link a:hover {
-            text-decoration: underline;
-        }
-        hr {
-            margin: 20px 0;
-        }
-    </style>
+    <link rel="stylesheet" href="/superproject/css/login.css">
 </head>
 <body>
 <div class="container">

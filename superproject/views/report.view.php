@@ -10,57 +10,6 @@ if (!defined('APP_LOADED')) {
     <title>Отчеты</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style>
-        @media print {
-            body {
-                background-color: #fff !important;
-                color: #000 !important;
-                font-size: 11px !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-            .navbar, .filter-card, .btn-actions, footer, .btn, script {
-                display: none !important;
-            }
-            .container, .container-fluid {
-                max-width: 100% !important;
-                width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-            .card {
-                border: none !important;
-                box-shadow: none !important;
-            }
-            .card-body {
-                padding: 0 !important;
-            }
-            .table-responsive {
-                overflow: visible !important;
-            }
-            .table {
-                width: 100% !important;
-                border-collapse: collapse !important;
-                overflow: visible !important;
-            }
-            .table th, .table td {
-                border: 1px solid #000 !important;
-                padding: 4px 6px !important;
-                color: #000 !important;
-                background-color: #fff !important;
-            }
-            tr {
-                page-break-inside: avoid !important;
-            }
-            .print-header {
-                display: block !important;
-            }
-        }
-        
-        .print-header {
-            display: none;
-        }
-    </style>
 </head>
 <body>
 <?php include __DIR__ . '/components/header.view.php'; ?>

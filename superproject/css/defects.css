@@ -1,0 +1,46 @@
+/* Стили для страницы дефектов */
+.defect-card {
+    transition: 0.2s;
+    border-left: 4px solid;
+    margin-bottom: 20px;
+}
+
+.border-open {
+    border-left-color: #dc3545;
+}
+
+.border-progress {
+    border-left-color: #ffc107;
+}
+
+.border-closed {
+    border-left-color: #198754;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.defect-photo {
+    max-height: 150px;
+    max-width: 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    object-fit: contain;
+}
+.defect-materials-info {
+    margin-top: 10px;
+    padding-top: 8px;
+    font-size: 13px;
+}
+
+.defect-material-badge {
+    background: #e9ecef;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-right: 5px;
+    display: inline-block;
+    margin-top: 5px;
+}
