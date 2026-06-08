@@ -2,6 +2,9 @@
 if (!defined('APP_LOADED')) {
     die('Прямой доступ запрещен');
 }
+if (!defined('BASE_URL')) {
+    define('BASE_URL', '/superproject/');
+}
 ?>
 <!DOCTYPE html>
 <html lang="ru">
