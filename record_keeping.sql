@@ -73,11 +73,23 @@ CREATE TABLE `locations` (
 --
 
 INSERT INTO `locations` (`id`, `name`, `type`, `room_number`) VALUES
-(1, 'Кабинет 335', 'room', '335А'),
-(2, 'Кабинет 319', 'room', '319Б'),
-(3, 'Кабинет 311', 'room', '311'),
-(4, 'Кабинет 345', 'room', '345'),
-(5, 'Кабинет 301', 'room', '301');
+(1, 'ПК-01', 'workspace', '319Б'),
+(2, 'ПК-02', 'workspace', '319Б'),
+(3, 'ПК-03', 'workspace', '319Б'),
+(4, 'ПК-04', 'workspace', '319Б'),
+(5, 'ПК-05', 'workspace', '319Б'),
+(6, 'ПК-06', 'workspace', '319Б'),
+(7, 'ПК-07', 'workspace', '319Б'),
+(8, 'ПК-08', 'workspace', '319Б'),
+(9, 'ПК-09', 'workspace', '319Б'),
+(10, 'ПК-10', 'workspace', '319Б'),
+(11, 'ПК-11', 'workspace', '319Б'),
+(12, 'ПК-12', 'workspace', '319Б'),
+(13, 'ПК-13', 'workspace', '319Б'),
+(14, 'ПК-14', 'workspace', '319Б'),
+(15, 'ПК-15', 'workspace', '319Б'),
+(16, 'Рабочее место преподавателя', 'workspace', '319Б'),
+(17, 'Серверный шкаф', 'rack', '319Б');
 
 -- --------------------------------------------------------
 
@@ -192,22 +204,22 @@ CREATE TABLE `network_points` (
 --
 
 INSERT INTO `network_points` (`id`, `label`, `type`, `location_id`, `location_end_id`, `status`, `last_check`) VALUES
-(1, 'Розетка-01', 'socket', 2, NULL, 'active', '2026-06-01'),
+(1, 'Розетка-01', 'socket', 1, NULL, 'active', '2026-06-01'),
 (2, 'Розетка-02', 'socket', 2, NULL, 'active', '2026-06-01'),
-(3, 'Розетка-03', 'socket', 2, NULL, 'active', '2026-06-01'),
-(4, 'Розетка-04', 'socket', 2, NULL, 'active', '2026-06-01'),
-(5, 'Розетка-05', 'socket', 2, NULL, 'active', '2026-06-01'),
-(6, 'Розетка-06', 'socket', 2, NULL, 'active', '2026-06-01'),
-(7, 'Розетка-07', 'socket', 2, NULL, 'active', '2026-06-01'),
-(8, 'Розетка-08', 'socket', 2, NULL, 'active', '2026-06-01'),
+(3, 'Розетка-03', 'socket', 3, NULL, 'active', '2026-06-01'),
+(4, 'Розетка-04', 'socket', 4, NULL, 'active', '2026-06-01'),
+(5, 'Розетка-05', 'socket', 5, NULL, 'active', '2026-06-01'),
+(6, 'Розетка-06', 'socket', 6, NULL, 'active', '2026-06-01'),
+(7, 'Розетка-07', 'socket', 7, NULL, 'active', '2026-06-01'),
+(8, 'Розетка-08', 'socket', 8, NULL, 'active', '2026-06-01'),
 (9, 'Кабель-01', 'cable_run', 2, 1, 'active', '2026-05-28'),
-(10, 'Кабель-02', 'cable_run', 2, 1, 'active', '2026-05-28'),
-(11, 'Кабель-03', 'cable_run', 2, 1, 'active', '2026-05-28'),
-(12, 'Кабель-044', 'cable_run', 2, 1, 'active', '2026-05-28'),
-(13, 'Патч-корд-01', 'patch_cord', 2, NULL, 'active', '2026-06-01'),
-(14, 'Патч-корд-02', 'patch_cord', 2, NULL, 'active', '2026-06-01'),
-(15, 'Патч-корд-03', 'patch_cord', 2, NULL, 'active', '2026-06-01'),
-(16, 'Патч-корд-044', 'patch_cord', 5, NULL, 'active', '2026-06-06');
+(10, 'Кабель-02', 'cable_run', 3, 2, 'active', '2026-05-28'),
+(11, 'Кабель-03', 'cable_run', 4, 3, 'active', '2026-05-28'),
+(12, 'Кабель-044', 'cable_run', 5, 4, 'active', '2026-05-28'),
+(13, 'Патч-корд-01', 'patch_cord', 9, NULL, 'active', '2026-06-01'),
+(14, 'Патч-корд-02', 'patch_cord', 10, NULL, 'active', '2026-06-01'),
+(15, 'Патч-корд-03', 'patch_cord', 11, NULL, 'active', '2026-06-01'),
+(16, 'Патч-корд-044', 'patch_cord', 16, NULL, 'active', '2026-06-06');
 
 -- --------------------------------------------------------
 
@@ -300,7 +312,7 @@ ALTER TABLE `defects`
 -- AUTO_INCREMENT для таблицы `locations`
 --
 ALTER TABLE `locations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT для таблицы `logs`
