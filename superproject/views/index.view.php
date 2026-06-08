@@ -6,17 +6,6 @@ include __DIR__ . '/components/header.view.php';
 
 <div class="container-fluid mt-4">
     <h2 class="mb-3">Точки сети</h2>
-    <style>
-        .btn-salad { background-color: #90EE90; border-color: #90EE90; color: #333; }
-        .btn-salad:hover { background-color: #7CFC00; border-color: #7CFC00; }
-        .pagination .page-link { color: #333; }
-        .pagination .page-item.active .page-link { background-color: #90EE90; border-color: #90EE90; }
-        .pagination .page-item.active .page-link:hover { background-color: #7CFC00; }
-        .table-borderless th, .table-borderless td, .table-borderless thead th { border: 1px solid rgba(0,0,0,.05); }
-        .table-hover tbody tr:hover { background-color: rgba(90, 255, 90, 0.2); }
-        .card-body { background-color: #fff; }
-    </style>
-
     <div class="mb-4">
         <form action="" method="get" class="input-group">
             <input type="text" name="search" class="form-control" placeholder="Поиск по точкам..." value="<?= htmlspecialchars($search ?? '') ?>">
