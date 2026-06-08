@@ -8,56 +8,48 @@ if (!defined('APP_LOADED')) {
 <head>
     <meta charset="UTF-8">
     <title>Журнал действий</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .header { background: #333; color: white; padding: 10px; margin-bottom: 20px; }
-        .header a { color: white; text-decoration: none; margin-right: 15px; }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body>
 
-<div class="header">
-    <a href="../controllers/index.controller.php">Главная</a>
-    <a href="../controllers/defects.controller.php">Поломки</a>
-    <a href="../controllers/inventory.controller.php">Оборудование</a>
-    <a href="../controllers/logs.controller.php" style="font-weight: bold;">Логи</a>
-    <a href="../controllers/logout.controller.php">Выход</a>
-    <span style="float: right;">Администратор</span>
+<?php include '/components/header.view.php'; ?>
+
+<div class="container mt-4">
+    <h2>Журнал действий</h2>
+
+    <?php if (empty($logs)): ?>
+        <div class="alert alert-info">Журнал действий пуст.</div>
+    <?php else: ?>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Пользователь</th>
+                        <th>Действие</th>
+                        <th>Таблица</th>
+                        <th>ID записи</th>
+                        <th>Дата</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($logs as $log): ?>
+                        <tr>
+                            <td><?= $log['id'] ?></td>
+                            <td><?= $log['name'] ?? 'Система' ?></td>
+                            <td><?= htmlspecialchars($log['action']) ?></td>
+                            <td><?= $log['target_table'] ?: '—' ?></td>
+                            <td><?= $log['target_id'] ?: '—' ?></td>
+                            <td><?= date('d.m.Y H:i:s', strtotime($log['created_at'])) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php endif; ?>
 </div>
 
-<h2>Журнал действий</h2>
-
-<?php if (empty($logs)): ?>
-    <p>Журнал действий пуст.</p>
-<?php else: ?>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Пользователь</th>
-                <th>Действие</th>
-                <th>Таблица</th>
-                <th>ID записи</th>
-                <th>Дата</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($logs as $log): ?>
-                <tr>
-                    <td><?= $log['id'] ?></td>
-                    <td><?= $log['name'] ?? 'Система' ?></td>
-                    <td><?= htmlspecialchars($log['action']) ?></td>
-                    <td><?= $log['target_table'] ?: '—' ?></td>
-                    <td><?= $log['target_id'] ?: '—' ?></td>
-                    <td><?= date('d.m.Y H:i:s', strtotime($log['created_at'])) ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-<?php endif; ?>
-
+<?php include '/components/footer.view.php'; ?>
 </body>
 </html>
