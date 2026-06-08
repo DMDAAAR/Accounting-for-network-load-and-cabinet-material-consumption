@@ -30,9 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $location_id = $_POST['location_id'] ?? null;
 
     if (!empty($label)) {
-        addNetworkPoint($pdo, $label, $type, $status, $location_id);
+        $newId = addNetworkPoint($pdo, $label, $type, $status, $location_id);
         addLog($pdo, $userId, "Добавил точку: $label", 'network_points', 0);
         $_SESSION['flash_success'] = "Точка '$label' добавлена";
+
+        if ($status === 'defect'){
+            $_SESSION['flash_info'] = "Пожалуйста, подробно опишите неисправность точки '$label'";
+            header("Location: defects.controller.php?point_id=" . $newId);
+            exit;
+        }
     } else {
         $_SESSION['flash_error'] = "Название точки не может быть пустым";
     }
@@ -52,13 +58,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         updateNetworkPoint($pdo, $id, $label, $type, $status, $location_id);
         addLog($pdo, $userId, "Изменил точку: $label", 'network_points', $id);
         $_SESSION['flash_success'] = "Точка '$label' обновлена";
-    } else {
-        $_SESSION['flash_error'] = "Ошибка при обновлении";
-    }
 
+        if ($status === 'defect'){
+            $_SESSION['flash_info'] = "Пожалуйста, подробно опишите неисправность точки '$label'";
+            header("Location: defects.controller.php?point_id=" . $id);
+            exit;
+        }
+    }else {
+        $_SESSION['flash_error'] = "Ошибка при обновлении";
+        }
     header('Location: inventory.controller.php');
     exit();
-}
+ }
+ 
 // ========== УДАЛЕНИЕ ТОЧКИ ==========
 if (isset($_GET['action']) && $_GET['action'] === 'delete') {
     $id = (int)($_GET['id'] ?? 0);
