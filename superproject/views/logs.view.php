@@ -20,11 +20,11 @@ if (!defined('APP_LOADED')) {
 <body>
 
 <div class="header">
-    <a href="dashboard.controller.php">Главная</a>
-    <a href="defects.controller.php">Поломки</a>
-    <a href="inventory.controller.php">Оборудование</a>
-    <a href="logs.controller.php" style="font-weight: bold;">Логи</a>
-    <a href="logout.controller.php">Выход</a>
+    <a href="../controllers/index.controller.php">Главная</a>
+    <a href="../controllers/defects.controller.php">Поломки</a>
+    <a href="../controllers/inventory.controller.php">Оборудование</a>
+    <a href="../controllers/logs.controller.php" style="font-weight: bold;">Логи</a>
+    <a href="../controllers/logout.controller.php">Выход</a>
     <span style="float: right;">Администратор</span>
 </div>
 
