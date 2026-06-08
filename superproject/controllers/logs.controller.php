@@ -1,0 +1,22 @@
+<?php
+define('APP_LOADED', true);
+
+session_start();
+
+if (!isset($_SESSION['user'])) {
+    header('Location: ../controllers/login.controller.php');
+    exit();
+}
+
+if ($_SESSION['user']['role'] !== 'admin') {
+    $_SESSION['flash_error'] = 'Доступ запрещён. Только для администраторов.';
+    header('Location: ../controllers.index.controller.php');
+    exit();
+}
+
+require_once '../db/connectDB.php';
+require_once '../models/logs.model.php';
+
+$logs = getAllLogs($pdo);
+
+include '../views/logs.view.php';
