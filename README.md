@@ -83,7 +83,7 @@ superproject/
 │   ├── statistics.controller.php
 │   ├── logs.controller.php
 │   ├── login.controller.php
-│   ├── register.controller.php
+│    register.controller.php
 │   └── logout.controller.php
 │
 ├── views/                # Визуальная часть, HTML-шаблоны страниц
@@ -98,6 +98,14 @@ superproject/
 │   ├── logs.view.php     # Системные логи
 │   ├── login.view.php    # Окно входа
 │   └── register.view.php # Окно регистрации
+││
+├── css/                   # Дополнение к визуалу
+│   ├── defects.css   
+│   ├── index.css
+│   ├── login.css
+│   ├── report.css
+│   ├── statistic.css
+│   └── main.css
 │
 ├── uploads/              # Папка для загружаемых медиафайлов
 │   ├── physic.svg        # Физический план кабинета (экспорт из Draw.io)
@@ -127,7 +135,7 @@ superproject/
         ![Папка controllers](images/controllers.png)
 
     *   **Папка `views/` (представления и шаблоны):*
-    
+
         ![Папка views](images/views.png)
 
     *   **Папка `uploads/` (хранилище файлов и схем):**
