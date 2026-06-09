@@ -24,11 +24,6 @@
     font-size: 1rem;
     font-weight: 400;
 }
-<<<<<<< Updated upstream
-
-/* Карточки метрик */
-=======
->>>>>>> Stashed changes
 .metric-card {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(8px);
@@ -85,10 +80,7 @@
     font-weight: 500;
 }
 
-<<<<<<< Updated upstream
-/* Карточки диаграмм */
-=======
->>>>>>> Stashed changes
+
 .chart-card {
     background: white;
     border-radius: 36px;
@@ -288,11 +280,7 @@
     font-weight: 500;
 }
 
-<<<<<<< Updated upstream
-/* Адаптивность */
-=======
 
->>>>>>> Stashed changes
 @media (max-width: 992px) {
     .ports-grid {
         gap: 10px;
