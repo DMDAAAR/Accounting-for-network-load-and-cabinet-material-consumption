@@ -23,7 +23,10 @@ include __DIR__ . '/components/header.view.php';
 
         .zoom-target {
             transform-origin: 0 0;
+<<<<<<< Updated upstream
             transition: transform 0.2s ease;
+=======
+>>>>>>> Stashed changes
         }
 
         .svg-container svg {
@@ -39,6 +42,20 @@ include __DIR__ . '/components/header.view.php';
         #network-zoom {
             transform: scale(<?= $zoom_network ?>);
         }
+<<<<<<< Updated upstream
+=======
+
+        <?php foreach ($locationsWithStatus as $l): 
+            $color = ($l['defect_count'] > 0) ? '#dc3545' : '#198754';
+        ?>
+            #pc-<?= $l['id'] ?> circle,
+            #pc-<?= $l['id'] ?> rect,
+            #pc-<?= $l['id'] ?> ellipse {
+                fill: <?= $color ?> !important;
+                stroke: <?= $color ?> !important;
+            }
+        <?php endforeach; ?>
+>>>>>>> Stashed changes
     </style>
 
     <div class="row g-4 mb-5">
@@ -90,7 +107,11 @@ include __DIR__ . '/components/header.view.php';
                     <div class="zoom-wrapper">
                         <div id="network-zoom" class="zoom-target">
                             <?php 
+<<<<<<< Updated upstream
                             $networkPath = __DIR__ . '/../uploads/network.svg';
+=======
+                            $networkPath = __DIR__ . '/../uploads/Диаграмма без названия.drawio (1).svg';
+>>>>>>> Stashed changes
                             if (file_exists($networkPath)): 
                             ?>
                                 <div class="svg-container">
@@ -112,4 +133,8 @@ include __DIR__ . '/components/header.view.php';
 
 <?php 
 include __DIR__ . '/components/footer.view.php'; 
+<<<<<<< Updated upstream
 ?>
+=======
+?>
+>>>>>>> Stashed changes

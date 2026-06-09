@@ -15,7 +15,12 @@ require_once '../models/statistics.model.php';
 
 $totalComputers = getTotalComputers($pdo);
 $networkStats = getNetworkPointsStats($pdo);
+<<<<<<< Updated upstream
 $materialsStats = getMaterialsStats($pdo);
+=======
+$materialsUsage = getMaterialsUsageStats($pdo); // Данные о расходе из material_usage
+$materialsRemaining = getMaterialsRemainingStats($pdo); // Остатки на складе
+>>>>>>> Stashed changes
 $switchPorts = getSwitchPortsData($pdo);
 
 // Подготовка данных для круговых диаграмм
@@ -40,6 +45,7 @@ foreach ($pieNetworkData as $key => $item) {
     $start += $angle;
 }
 
+<<<<<<< Updated upstream
 $pieMaterialData = [
     'cable' => ['value' => $materialsStats['cable'], 'color' => '#17a2b8', 'label' => 'Кабель (м)'],
     'connector' => ['value' => $materialsStats['connector'], 'color' => '#ffc107', 'label' => 'Коннекторы (шт)'],
@@ -52,6 +58,33 @@ foreach ($pieMaterialData as $key => $item) {
     $percent = $totalMaterial > 0 ? ($item['value'] / $totalMaterial) : 0;
     $angle = $percent * 360;
     $materialAngles[$key] = [
+=======
+// Данные для диаграммы ОСТАТКОВ материалов на складе
+$pieRemainingData = [
+    'cable' => [
+        'value' => $materialsRemaining['cable'], 
+        'color' => '#17a2b8', 
+        'label' => 'Кабель (м)'
+    ],
+    'connector' => [
+        'value' => $materialsRemaining['connector'], 
+        'color' => '#ffc107', 
+        'label' => 'Коннекторы (шт)'
+    ],
+    'socket' => [
+        'value' => $materialsRemaining['socket'], 
+        'color' => '#6610f2', 
+        'label' => 'Розетки (шт)'
+    ]
+];
+$totalRemaining = array_sum(array_column($pieRemainingData, 'value'));
+$remainingAngles = [];
+$start = 0;
+foreach ($pieRemainingData as $key => $item) {
+    $percent = $totalRemaining > 0 ? ($item['value'] / $totalRemaining) : 0;
+    $angle = $percent * 360;
+    $remainingAngles[$key] = [
+>>>>>>> Stashed changes
         'start' => $start,
         'end' => $start + $angle,
         'color' => $item['color'],
@@ -61,4 +94,9 @@ foreach ($pieMaterialData as $key => $item) {
     $start += $angle;
 }
 
+<<<<<<< Updated upstream
 include '../views/statistics.view.php';
+=======
+include '../views/statistics.view.php';
+?>
+>>>>>>> Stashed changes

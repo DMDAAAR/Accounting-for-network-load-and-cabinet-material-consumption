@@ -15,13 +15,25 @@ require_once '../models/logs.model.php';
 
 $userId = $_SESSION['user']['id'];
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $limit = 10;
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 $offset = ($page - 1) * $limit;
 
 $points = getFilteredPoints($pdo, $search, $limit, $offset);
+<<<<<<< Updated upstream
+=======
+
+// ДОБАВЛЯЕМ МАТЕРИАЛЫ ДЛЯ КАЖДОЙ ТОЧКИ
+foreach ($points as &$point) {
+    $point['materials'] = getMaterialsUsedForPoint($pdo, $point['id']);
+}
+
+>>>>>>> Stashed changes
 $totalPoints = getTotalFilteredPoints($pdo, $search);
 $totalPages = ceil($totalPoints / $limit);
 
@@ -49,7 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     exit();
 }
 
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit') {
     $id = (int)($_POST['id'] ?? 0);
     $label = trim($_POST['label'] ?? '');
@@ -97,6 +112,10 @@ if (isset($_GET['edit_id'])) {
     $edit_id = (int)$_GET['edit_id'];
     if ($edit_id > 0) {
         $edit_point = getStatsPointById($pdo, $edit_id);
+        // Для редактируемой точки тоже можно добавить материалы, если нужно
+        if ($edit_point) {
+            $edit_point['materials'] = getMaterialsUsedForPoint($pdo, $edit_id);
+        }
     }
 }
 

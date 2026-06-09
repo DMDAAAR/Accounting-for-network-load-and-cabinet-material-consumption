@@ -2,12 +2,23 @@
 // models/dashboard.model.php - добавляем новые функции в конец файла
 if (!function_exists('getDefectsCountByPoint')) {
 
+<<<<<<< Updated upstream
     function getDefectsCountByPoint($pdo) {
         $sql = "SELECT point_id, COUNT(*) as count
                 FROM defects
                 WHERE status IN ('open', 'in_progress')
                 GROUP BY point_id";
 
+=======
+if (!function_exists('getDefectsCountByPoint')) {
+
+    function getDefectsCountByPoint($pdo) {
+        $sql = "SELECT point_id, COUNT(*) as count
+                FROM defects
+                WHERE status IN ('open', 'in_progress')
+                GROUP BY point_id";
+
+>>>>>>> Stashed changes
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
