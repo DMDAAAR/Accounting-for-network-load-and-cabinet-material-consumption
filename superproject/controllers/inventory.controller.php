@@ -1,82 +1,114 @@
 <?php
-
 session_start();
 
-if (!defined('APP_LOADED')) {
-    define('APP_LOADED', true);
-}
-if (!defined('BASE_URL')) {
-    define('BASE_URL', '/superproject/');
-}
-
-if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
-    header('Location: ../login.controller.php');
+define('APP_LOADED', true);
+define('BASE_URL', '/superproject/');
+// Проверяем, зашел ли пользователь
+if (!isset($_SESSION['user'])) {
+    header('Location: login.controller.php');
     exit();
 }
 
 require_once '../db/connectDB.php';
 require_once '../models/inventory.model.php';
 require_once '../models/logs.model.php';
-// ... остальной код ...
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['action']) && $_POST['action'] === 'add') {
-        $label = trim($_POST['label'] ?? '');
-        $type = trim($_POST['type'] ?? 'socket');
-        $status = trim($_POST['status'] ?? 'active');
-        $location_id = $_POST['location_id'] ?? '';
 
-        if (!empty($label)) {
-            addNetworkPoint($pdo, $label, $type, $status, $location_id);
-            addLog($pdo, $_SESSION['user']['id'], 'Добавлен новый сетевой узел', '', $location_id);
+$userId = $_SESSION['user']['id'];
+
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+$limit = 10;
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$offset = ($page - 1) * $limit;
+
+$points = getFilteredPoints($pdo, $search, $limit, $offset);
+
+// ДОБАВЛЯЕМ МАТЕРИАЛЫ ДЛЯ КАЖДОЙ ТОЧКИ
+foreach ($points as &$point) {
+    $point['materials'] = getMaterialsUsedForPoint($pdo, $point['id']);
+}
+
+$totalPoints = getTotalFilteredPoints($pdo, $search);
+$totalPages = ceil($totalPoints / $limit);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'add') {
+    $label = trim($_POST['label'] ?? '');
+    $type = trim($_POST['type'] ?? 'socket');
+    $status = trim($_POST['status'] ?? 'active');
+    $location_id = $_POST['location_id'] ?? null;
+
+    if (!empty($label)) {
+        $newId = addNetworkPoint($pdo, $label, $type, $status, $location_id);
+        addLog($pdo, $userId, "Добавил точку: $label", 'network_points', 0);
+        $_SESSION['flash_success'] = "Точка '$label' добавлена";
+
+        if ($status === 'defect'){
+            $_SESSION['flash_info'] = "Пожалуйста, подробно опишите неисправность точки '$label'";
+            header("Location: defects.controller.php?point_id=" . $newId);
+            exit;
         }
-        header('Location: inventory.controller.php');
-        exit();
+    } else {
+        $_SESSION['flash_error'] = "Название точки не может быть пустым";
     }
 
-    if (isset($_POST['action']) && $_POST['action'] === 'edit') {
-        $id = intval($_POST['id'] ?? 0);
-        $label = trim($_POST['label'] ?? '');
-        $type = trim($_POST['type'] ?? 'socket');
-        $status = trim($_POST['status'] ?? 'active');
-        $location_id = $_POST['location_id'] ?? '';
+    header('Location: inventory.controller.php');
+    exit();
+}
 
-        if ($id > 0 && !empty($label)) {
-            updateNetworkPoint($pdo, $id, $label, $type, $status, $location_id);
-            addLog($pdo, $_SESSION['user']['id'], 'Изменен сетевой узел', '', $id);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit') {
+    $id = (int)($_POST['id'] ?? 0);
+    $label = trim($_POST['label'] ?? '');
+    $type = trim($_POST['type'] ?? 'socket');
+    $status = trim($_POST['status'] ?? 'active');
+    $location_id = $_POST['location_id'] ?? null;
+
+    if ($id > 0 && !empty($label)) {
+        updateNetworkPoint($pdo, $id, $label, $type, $status, $location_id);
+        addLog($pdo, $userId, "Изменил точку: $label", 'network_points', $id);
+        $_SESSION['flash_success'] = "Точка '$label' обновлена";
+
+        if ($status === 'defect'){
+            $_SESSION['flash_info'] = "Пожалуйста, подробно опишите неисправность точки '$label'";
+            header("Location: defects.controller.php?point_id=" . $id);
+            exit;
         }
-        header('Location: inventory.controller.php');
-        exit();
+    } else {
+        $_SESSION['flash_error'] = "Ошибка при обновлении";
     }
+
+    header('Location: inventory.controller.php');
+    exit();
 }
 
 if (isset($_GET['action']) && $_GET['action'] === 'delete') {
-    $id = intval($_GET['id'] ?? 0);
+    $id = (int)($_GET['id'] ?? 0);
+
     if ($id > 0) {
+        $stmt = $pdo->prepare("SELECT label FROM network_points WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+        $point = $stmt->fetch();
+
         deleteNetworkPointById($pdo, $id);
-        addLog($pdo, $_SESSION['user']['id'], 'Удален сетевой узел', '', $_GET['id']);
+        addLog($pdo, $userId, "Удалил точку: " . ($point['label'] ?? "ID $id"), 'network_points', $id);
+        $_SESSION['flash_success'] = "Точка удалена";
     }
+
     header('Location: inventory.controller.php');
     exit();
 }
 
 $edit_point = null;
 if (isset($_GET['edit_id'])) {
-    $edit_id = intval($_GET['edit_id']);
+    $edit_id = (int)$_GET['edit_id'];
     if ($edit_id > 0) {
-
         $edit_point = getStatsPointById($pdo, $edit_id);
+        // Для редактируемой точки тоже можно добавить материалы, если нужно
+        if ($edit_point) {
+            $edit_point['materials'] = getMaterialsUsedForPoint($pdo, $edit_id);
+        }
     }
 }
-
-
-$sql = "SELECT network_points.*, locations.name AS location_name
-        FROM network_points
-        LEFT JOIN locations ON network_points.location_id = locations.id
-        ORDER BY network_points.id DESC";
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$points = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $rooms = getRooms($pdo);
 
 require '../views/inventory.view.php';
+?>

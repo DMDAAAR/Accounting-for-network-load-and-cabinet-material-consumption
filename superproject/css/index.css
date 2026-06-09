@@ -1,0 +1,57 @@
+
+.zoom-wrapper {
+    overflow: auto;
+    max-height: 480px;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    border-radius: 4px;
+}
+
+.zoom-target {
+    transform-origin: 0 0;
+    transition: transform 0.2s ease;
+}
+
+.svg-container svg {
+    width: 100% !important;
+    height: auto !important;
+    display: block;
+}
+
+.btn-salad {
+    background-color: #90EE90;
+    border-color: #90EE90;
+    color: #333;
+}
+
+.btn-salad:hover {
+    background-color: #7CFC00;
+    border-color: #7CFC00;
+}
+
+.pagination .page-link {
+    color: #333;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #90EE90;
+    border-color: #90EE90;
+}
+
+.pagination .page-item.active .page-link:hover {
+    background-color: #7CFC00;
+}
+
+.table-borderless th,
+.table-borderless td,
+.table-borderless thead th {
+    border: 1px solid rgba(0,0,0,.05);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(90, 255, 90, 0.2);
+}
+
+.card-body {
+    background-color: #fff;
+}

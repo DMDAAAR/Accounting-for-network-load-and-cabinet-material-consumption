@@ -11,6 +11,9 @@ session_start();
     <title>Починка дефекта - списание материалов</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        .defect-photo { max-height: 120px; border-radius: 5px; }
+    </style>
 </head>
 <body>
 <?php include __DIR__ . '/components/header.view.php'; ?>
@@ -24,9 +27,9 @@ session_start();
             <div class="alert alert-info">
                 <strong>Дефект:</strong> <?= htmlspecialchars($defect['title']) ?><br>
                 <strong>Описание:</strong> <?= nl2br(htmlspecialchars($defect['description'])) ?>
-                <?php if (!empty($defect['photo_data'])): ?>
+                <?php if (!empty($defect['photo_path'])): ?>
                     <div class="mt-2">
-                        <img src="<?= htmlspecialchars($defect['photo_data']) ?>" alt="Фото дефекта" style="max-height: 120px; border-radius: 5px;">
+                        <img src="<?= htmlspecialchars($defect['photo_path']) ?>" alt="Фото дефекта" class="defect-photo" onclick="window.open(this.src)">
                     </div>
                 <?php endif; ?>
             </div>
@@ -80,20 +83,34 @@ session_start();
     const container = document.getElementById('materialsContainer');
     const addBtn = document.getElementById('addMaterialBtn');
 
+    // Получаем список материалов из PHP (как JSON)
+    const materialsData = <?= json_encode($materials) ?>;
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function generateOptions() {
+        let options = '<option value="">Выберите материал</option>';
+        materialsData.forEach(mat => {
+            options += `<option value="${mat.id}">${escapeHtml(mat.name)} (остаток: ${mat.quantity} ${mat.unit})</option>`;
+        });
+        return options;
+    }
+
     function createMaterialRow() {
         const rowDiv = document.createElement('div');
         rowDiv.className = 'material-row row g-3 mb-3';
         rowDiv.innerHTML = `
             <div class="col-md-5">
                 <label class="form-label">Материал</label>
-                <select name="material_id[]" class="form-select" required>
-                    <option value="">Выберите материал</option>
-                    <?php foreach ($materials as $mat): ?>
-                        <option value="<?= $mat['id'] ?>">
-                            <?= htmlspecialchars($mat['name']) ?> (остаток: <?= $mat['quantity'] ?> <?= $mat['unit'] ?>)
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+                <select name="material_id[]" class="form-select" required>${generateOptions()}</select>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Количество</label>
@@ -122,6 +139,7 @@ session_start();
         });
     });
 
+    // Инициализация: скрыть кнопку удаления, если только одна строка
     const initialRows = container.querySelectorAll('.material-row');
     if (initialRows.length === 1) {
         initialRows[0].querySelector('.remove-row').style.display = 'none';

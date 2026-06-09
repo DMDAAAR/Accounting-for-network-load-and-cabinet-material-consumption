@@ -14,53 +14,10 @@ if (!defined('BASE_URL')) {
     <title>Учёт ЛВС</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style>
-        .navbar-salad {
-            background-color: #f0fff0 !important;
-            border-bottom: 2px solid #90EE90;
-        }
-        .navbar-salad .navbar-brand,
-        .navbar-salad .nav-link,
-        .navbar-salad .navbar-text {
-            color: #2c5e2c !important;
-        }
-        .navbar-salad .nav-link:hover {
-            color: #1a4d1a !important;
-            background-color: rgba(144, 238, 144, 0.2);
-            border-radius: 8px;
-        }
-        .btn-salad-outline {
-            border-color: #90EE90;
-            color: #2c5e2c;
-        }
-        .btn-salad-outline:hover {
-            background-color: #90EE90;
-            color: #fff;
-        }
-        .btn-salad {
-            background-color: #90EE90;
-            border-color: #90EE90;
-            color: #2c5e2c;
-        }
-        .btn-salad:hover {
-            background-color: #7CFC00;
-            border-color: #7CFC00;
-            color: #1a4d1a;
-        }
-        .active-nav {
-            font-weight: bold;
-            border-bottom: 2px solid #2c5e2c;
-        }
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            margin: 0;
-        }
-        .container {
-            flex: 1;
-        }
-    </style>
+    <link rel="stylesheet" href="/superproject/css/main.css">
+    <link rel="stylesheet" href="/superproject/css/index.css">
+    <link rel="stylesheet" href="/superproject/css/report.css">
+    <link rel="stylesheet" href="/superproject/css/defects.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-salad shadow-sm">
@@ -86,11 +43,20 @@ if (!defined('BASE_URL')) {
                 <li class="nav-item">
                     <a class="nav-link" href="<?= BASE_URL ?>controllers/report.controller.php">Отчёты</a>
                 </li>
+                <!-- НОВЫЙ ПУНКТ СТАТИСТИКА -->
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= BASE_URL ?>controllers/statistics.controller.php">Статистика</a>
+                </li>
+                <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'admin'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= BASE_URL ?>controllers/logs.controller.php">Логи</a>
+                    </li>
+                <?php endif; ?>
             </ul>
             <div class="d-flex">
                 <?php if (isset($_SESSION['user'])): ?>
                     <span class="navbar-text me-3">
-                        👤 <?= htmlspecialchars($_SESSION['user']['login']) ?>
+                         <?= htmlspecialchars($_SESSION['user']['login']) ?>
                         (<?= htmlspecialchars($_SESSION['user']['role']) ?>)
                     </span>
                     <a href="<?= BASE_URL ?>controllers/logout.controller.php" class="btn btn-salad-outline btn-sm">Выход</a>

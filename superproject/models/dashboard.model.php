@@ -1,142 +1,104 @@
 <?php
+// models/dashboard.model.php - добавляем новые функции в конец файла
+if (!function_exists('getDefectsCountByPoint')) {
 
-if (!function_exists('getRooms')) {
-    function getRooms($pdo) {
-        $stmt = $pdo->query('SELECT * FROM locations WHERE type = "room"');
-        $stmt->execute();
-        return $stmt->fetchAll();
-    }
-}
+    function getDefectsCountByPoint($pdo) {
+        $sql = "SELECT point_id, COUNT(*) as count
+                FROM defects
+                WHERE status IN ('open', 'in_progress')
+                GROUP BY point_id";
 
-if (!function_exists('getRoomById')) {
-    function getRoomById($pdo, $id) {
-        $stmt = $pdo->prepare('SELECT * FROM locations WHERE id = :id');
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch();
-    }
-}
-
-if (!function_exists('getStatsPoints')) {
-    function getStatsPoints($pdo) {
-        $sql = "SELECT * FROM network_points";
         $stmt = $pdo->prepare($sql);
         $stmt->execute();
-        return $stmt->fetchAll();
-    }
-}
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-if (!function_exists('getStatsPointById')) {
-    function getStatsPointById($pdo, $id) {
-        $sql = "SELECT * FROM network_points WHERE id = :id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch();
-    }
-}
-
-if (!function_exists('getOpenDefects')) {
-    function getOpenDefects($pdo) {
-        $sql = "SELECT * FROM defects WHERE status = 'open'";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll();
-    }
-}
-
-if (!function_exists('getDefectById')) {
-    function getDefectById($pdo, $id) {
-        $sql = "SELECT * FROM defects WHERE id = :id";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(['id' => $id]);
-        return $stmt->fetch();
-    }
-}
-
-if (!function_exists('getMaterialUsage')) {
-    function getMaterialUsage($pdo) {
-        $sql = "SELECT * FROM material_usage";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll();
-    }
-}
-
-if (!function_exists('getAllPoints')) {
-    function getAllPoints($pdo){
-        $sql = "
-            SELECT
-                np.id,
-                np.label,
-                np.type,
-                np.status,
-                np.last_check,
-                loc1.name AS location_name,
-                loc2.name AS location_end_name
-            FROM network_points np
-            LEFT JOIN locations loc1 ON np.location_id = loc1.id
-            LEFT JOIN locations loc2 ON np.location_end_id = loc2.id
-            ORDER BY np.id ASC
-        ";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-}
-
-if (!function_exists('getFilteredPoints')) {
-    function getFilteredPoints(PDO $pdo, string $search, int $limit, int $offset): array
-    {
-        $sql = "
-            SELECT
-                np.id, np.label, np.type, np.status, np.last_check,
-                loc1.name AS location_name,
-                loc2.name AS location_end_name
-            FROM network_points np
-            LEFT JOIN locations loc1 ON np.location_id = loc1.id
-            LEFT JOIN locations loc2 ON np.location_end_id = loc2.id
-            WHERE 1=1
-        ";
-        $params = [];
-        if (!empty($search)) {
-            $sql .= " AND (np.label LIKE :s1 OR loc1.name LIKE :s2 OR loc2.name LIKE :s3)";
-            $term = '%' . $search . '%';
-            $params[':s1'] = $term;
-            $params[':s2'] = $term;
-            $params[':s3'] = $term;
+        $defectsCount = [];
+        foreach ($results as $row) {
+            $defectsCount[$row['point_id']] = (int)$row['count'];
         }
-        $sql .= " ORDER BY np.id ASC LIMIT :limit OFFSET :offset";
 
-        $stmt = $pdo->prepare($sql);
-        foreach ($params as $k => $v) {
-            $stmt->bindValue($k, $v);
+        return $defectsCount;
+    }
+}
+if (!function_exists('buildCabinetScheme')) {
+
+    function buildCabinetScheme($points, $defectsCount) {
+        $rows = 3;
+        $cols = 5;
+
+
+        $pointsByLabel = [];
+        foreach ($points as $point) {
+            $pointsByLabel[$point['label']] = $point;
         }
-        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+
+        $scheme = [];
+        $counter = 1;
+
+        for ($row = 0; $row < $rows; $row++) {
+            $scheme[$row] = [];
+            for ($col = 0; $col < $cols; $col++) {
+                $expectedLabel = "Розетка-" . str_pad($counter, 2, '0', STR_PAD_LEFT);
+
+                if (isset($pointsByLabel[$expectedLabel])) {
+                    $point = $pointsByLabel[$expectedLabel];
+                    $pointId = $point['id'];
+                    $hasDefect = isset($defectsCount[$pointId]) && $defectsCount[$pointId] > 0;
+
+                    $scheme[$row][$col] = [
+                        'id' => $pointId,
+                        'label' => $point['label'],
+                        'type' => $point['type'],
+                        'status' => $point['status'],
+                        'hasDefect' => $hasDefect,
+                        'exists' => true
+                    ];
+                } else {
+                    $scheme[$row][$col] = [
+                        'id' => null,
+                        'label' => "Место $counter",
+                        'type' => null,
+                        'status' => null,
+                        'hasDefect' => false,
+                        'exists' => false
+                    ];
+                }
+                $counter++;
+            }
+        }
+
+        return $scheme;
+    }
+}
+if (!function_exists('getNetworkDevices')) {
+    function getNetworkDevices($pdo, $defectsCount) {
+        // Получаем все коммутаторы
+        $sqlSwitches = "SELECT * FROM network_points WHERE type = 'switch'";
+        $stmt = $pdo->prepare($sqlSwitches);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-}
+        $switches = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-if (!function_exists('getTotalFilteredPoints')) {
-    function getTotalFilteredPoints(PDO $pdo, string $search): int
-    {
-        $sql = "
-            SELECT COUNT(*)
-            FROM network_points np
-            LEFT JOIN locations loc1 ON np.location_id = loc1.id
-            LEFT JOIN locations loc2 ON np.location_end_id = loc2.id
-            WHERE 1=1
-        ";
-        $params = [];
-        if (!empty($search)) {
-            $sql .= " AND (np.label LIKE :s1 OR loc1.name LIKE :s2 OR loc2.name LIKE :s3)";
-            $term = '%' . $search . '%';
-            $params[':s1'] = $term;
-            $params[':s2'] = $term;
-            $params[':s3'] = $term;
+        // Добавляем информацию о дефектах для коммутаторов
+        foreach ($switches as &$switch) {
+            $switch['hasDefect'] = isset($defectsCount[$switch['id']]) && $defectsCount[$switch['id']] > 0;
         }
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute($params);
-        return (int) $stmt->fetchColumn();
+
+        // Получаем все розетки
+        $sqlSockets = "SELECT * FROM network_points WHERE type = 'socket' ORDER BY label";
+        $stmt = $pdo->prepare($sqlSockets);
+        $stmt->execute();
+        $sockets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Добавляем информацию о дефектах для розеток
+        foreach ($sockets as &$socket) {
+            $socket['hasDefect'] = isset($defectsCount[$socket['id']]) && $defectsCount[$socket['id']] > 0;
+        }
+
+        return [
+            'switches' => $switches,
+            'sockets' => $sockets
+        ];
     }
 }
+?>

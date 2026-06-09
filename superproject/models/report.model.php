@@ -4,49 +4,38 @@ if (!defined('APP_LOADED')) {
 }
 
 function getFilteredDefects($pdo, $date_from, $date_to, $category, $point_type, $status) {
-    $sql = "SELECT 
-                defects.id, 
-                defects.title, 
-                defects.category, 
-                defects.severity, 
-                defects.description, 
-                defects.status, 
-                defects.created_at,
-                network_points.label AS point_label, 
-                network_points.type AS point_type,
-                locations.name AS location_name, 
-                users.login AS creator_login
-            FROM defects
-            LEFT JOIN network_points ON defects.point_id = network_points.id
-            LEFT JOIN locations ON network_points.location_id = locations.id
-            LEFT JOIN users ON defects.created_by = users.id
+    $sql = "SELECT defects.*, network_points.label AS point_label, network_points.type AS point_type, locations.name AS location_name, users.login AS creator_login 
+            FROM defects 
+            LEFT JOIN network_points ON defects.point_id = network_points.id 
+            LEFT JOIN locations ON network_points.location_id = locations.id 
+            LEFT JOIN users ON defects.created_by = users.id 
             WHERE 1=1";
 
     $params = [];
 
-    if (!empty($date_from)) {
+    if ($date_from != '') {
         $sql .= " AND defects.created_at >= :date_from";
-        $params[':date_from'] = $date_from . ' 00:00:00';
+        $params['date_from'] = $date_from . ' 00:00:00';
     }
 
-    if (!empty($date_to)) {
+    if ($date_to != '') {
         $sql .= " AND defects.created_at <= :date_to";
-        $params[':date_to'] = $date_to . ' 23:59:59';
+        $params['date_to'] = $date_to . ' 23:59:59';
     }
 
-    if ($category !== 'all' && !empty($category)) {
+    if ($category != 'all' && $category != '') {
         $sql .= " AND defects.category = :category";
-        $params[':category'] = $category;
+        $params['category'] = $category;
     }
 
-    if ($point_type !== 'all' && !empty($point_type)) {
+    if ($point_type != 'all' && $point_type != '') {
         $sql .= " AND network_points.type = :point_type";
-        $params[':point_type'] = $point_type;
+        $params['point_type'] = $point_type;
     }
 
-    if ($status !== 'all' && !empty($status)) {
+    if ($status != 'all' && $status != '') {
         $sql .= " AND defects.status = :status";
-        $params[':status'] = $status;
+        $params['status'] = $status;
     }
 
     $sql .= " ORDER BY defects.created_at DESC";

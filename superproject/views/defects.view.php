@@ -11,28 +11,7 @@ session_start();
     <title>Дефекты ЛВС</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style>
-        .defect-card {
-            transition: 0.2s;
-            border-left: 4px solid;
-            margin-bottom: 20px;
-        }
-        .border-open { border-left-color: #dc3545; }
-        .border-progress { border-left-color: #ffc107; }
-        .border-closed { border-left-color: #198754; }
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
-        }
-        .defect-photo {
-            max-height: 150px;
-            max-width: 100%;
-            border-radius: 8px;
-            cursor: pointer;
-            object-fit: contain;
-        }
-    </style>
+    <link rel="stylesheet" href="<?= BASE_URL ?>css/defects.css">
 </head>
 <body>
 <?php include __DIR__ . '/components/header.view.php'; ?>
@@ -44,9 +23,16 @@ session_start();
     <?php if (isset($_SESSION['flash_success'])): ?>
         <div class="alert alert-success alert-dismissible fade show"><?= htmlspecialchars($_SESSION['flash_success']); unset($_SESSION['flash_success']); ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
     <?php endif; ?>
+    
+    <?php if (isset($_SESSION['flash_info'])): ?>
+        <div class="alert alert-info alert-dismissible fade show">
+            <i class="bi bi-info-circle-fill"></i> 
+            <?= htmlspecialchars($_SESSION['flash_info']); unset($_SESSION['flash_info']); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php endif; ?>
 
     <div class="row">
-        <!-- Форма: добавление + редактирование -->
         <div class="col-lg-4 mb-4">
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
@@ -73,10 +59,40 @@ session_start();
                             <label class="form-label">Точка сети</label>
                             <select name="point_id" class="form-select" required>
                                 <?php foreach ($networkPoints as $point): ?>
-                                    <option value="<?= $point['id'] ?>" <?= (isset($editableDefect) && $editableDefect['point_id'] == $point['id']) ? 'selected' : '' ?>>
+                                    <?php
+                                    $selected = false;
+                                    // Если редактируем дефект - выбираем сохранённую точку
+                                    if (isset($editableDefect) && $editableDefect['point_id'] == $point['id']) {
+                                        $selected = true;
+                                    }
+                                    // Если перешли с inventory (статус defect) - выбираем переданную точку
+                                    if (isset($preSelectedPointId) && $preSelectedPointId == $point['id']) {
+                                        $selected = true;
+                                    }
+                                    ?>
+                                    <option value="<?= $point['id'] ?>" <?= $selected ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($point['label']) ?> (ID <?= $point['id'] ?>)
                                     </option>
                                 <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Категория</label>
+                            <select name="category" class="form-select">
+                                <option value="other" <?= (isset($editableDefect) && $editableDefect['category'] == 'other') ? 'selected' : '' ?>>Другое</option>
+                                <option value="network" <?= (isset($editableDefect) && $editableDefect['category'] == 'network') ? 'selected' : '' ?>>Сеть</option>
+                                <option value="power" <?= (isset($editableDefect) && $editableDefect['category'] == 'power') ? 'selected' : '' ?>>Электропитание</option>
+                                <option value="hardware" <?= (isset($editableDefect) && $editableDefect['category'] == 'hardware') ? 'selected' : '' ?>>Оборудование</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Критичность</label>
+                            <select name="severity" class="form-select">
+                                <option value="low" <?= (isset($editableDefect) && $editableDefect['severity'] == 'low') ? 'selected' : '' ?>>Низкая</option>
+                                <option value="medium" <?= (isset($editableDefect) && $editableDefect['severity'] == 'medium') ? 'selected' : '' ?>>Средняя</option>
+                                <option value="high" <?= (isset($editableDefect) && $editableDefect['severity'] == 'high') ? 'selected' : '' ?>>Высокая</option>
                             </select>
                         </div>
 
@@ -111,7 +127,6 @@ session_start();
             </div>
         </div>
 
-        <!-- Список дефектов -->
         <div class="col-lg-8">
             <h4 class="mb-3">Журнал дефектов <span class="badge bg-secondary"><?= count($defects) ?></span></h4>
             <?php if (empty($defects)): ?>
@@ -138,9 +153,26 @@ session_start();
                                 <?php endif; ?>
                                 <p class="mb-2"><?= nl2br(htmlspecialchars($d['description'])) ?></p>
                                 <small class="text-muted">
+                                    <i class="bi bi-tag"></i> Категория: <?= htmlspecialchars($d['category']) ?><br>
+                                    <i class="bi bi-exclamation-diamond"></i> Критичность: <?= htmlspecialchars($d['severity']) ?><br>
                                     <i class="bi bi-hdd-network"></i> Точка ID: <?= $d['point_id'] ?><br>
                                     <i class="bi bi-calendar3"></i> <?= date('d.m.Y H:i', strtotime($d['created_at'])) ?>
                                 </small>
+
+                                <?php if ($d['status'] == 'closed'): ?>
+                                    <div class="mt-3 pt-2 border-top defect-materials-info">
+                                        <strong>Материалы:</strong>
+                                        <?php if (!empty($d['used_materials'])): ?>
+                                            <?php foreach ($d['used_materials'] as $material): ?>
+                                                <span class="defect-material-badge">
+                                                    <?= htmlspecialchars($material['name']) ?>: <?= $material['quantity'] ?> <?= $material['unit'] ?>
+                                                </span>
+                                            <?php endforeach; ?>
+                                        <?php else: ?>
+                                            <span style="color: #666;">не списывались</span>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <div class="card-footer bg-white d-flex justify-content-end gap-2">
                                 <a href="?edit_id=<?= $d['id'] ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i> Изменить</a>

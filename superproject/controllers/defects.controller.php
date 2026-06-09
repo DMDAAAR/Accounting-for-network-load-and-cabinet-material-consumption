@@ -18,30 +18,23 @@ require_once '../models/logs.model.php';
 
 $userId = $_SESSION['user']['id'];
 
-// --- Функция для создания папки и получения пути для сохранения ---
 function getUploadPath($relativePath = 'uploads/defects/') {
-    // Корень проекта = папка, содержащая controllers/
     $projectRoot = dirname(__DIR__);
     $fullPath = $projectRoot . '/' . ltrim($relativePath, '/');
-
-    // Если папки нет – пытаемся создать
     if (!is_dir($fullPath)) {
         if (!mkdir($fullPath, 0755, true)) {
             $_SESSION['flash_error'] = "Не удалось создать папку: $relativePath. Пожалуйста, создайте её вручную.";
             return false;
         }
     }
-
-    // Проверяем возможность записи
     if (!is_writable($fullPath)) {
         $_SESSION['flash_error'] = "Папка $relativePath недоступна для записи. Установите права на запись.";
         return false;
     }
-
     return $fullPath;
 }
 
-// --- Обработка POST ---
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 1. Починка
@@ -106,6 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $description = trim($_POST['description'] ?? '');
     $point_id    = (int)($_POST['point_id'] ?? 1);
     $status      = $_POST['status'] ?? 'open';
+    $category    = $_POST['category'] ?? 'other';
+    $severity    = $_POST['severity'] ?? 'medium';
 
     $photo_path = null;
     $uploadError = false;
@@ -117,7 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-        // Валидация
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mime = finfo_file($finfo, $_FILES['photo']['tmp_name']);
         finfo_close($finfo);
@@ -153,11 +147,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Валидация полей
     $error = null;
     if (empty($title)) $error = "Укажите название поломки";
     elseif (empty($description)) $error = "Опишите проблему";
     elseif (!in_array($status, ['open', 'in_progress', 'closed'])) $error = "Некорректный статус";
+    elseif (!in_array($category, ['network', 'power', 'hardware', 'other'])) $error = "Некорректная категория";
+    elseif (!in_array($severity, ['low', 'medium', 'high'])) $error = "Некорректная критичность";
 
     if (isset($_POST['id']) && !empty($_POST['id'])) {
         $id = (int)$_POST['id'];
@@ -166,14 +161,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $old = getDefectById($pdo, $id);
                 $photo_path = $old['photo_path'];
             } else {
-                // Удаляем старое фото
                 $old = getDefectById($pdo, $id);
                 if ($old && !empty($old['photo_path'])) {
                     $oldFile = dirname(__DIR__) . '/' . ltrim(str_replace(BASE_URL, '', $old['photo_path']), '/');
                     if (file_exists($oldFile)) unlink($oldFile);
                 }
             }
-            if (updateDefect($pdo, $id, $title, $description, $point_id, $status, $photo_path)) {
+            if (updateDefect($pdo, $id, $title, $description, $point_id, $status, $photo_path, $category, $severity)) {
                 addLog($pdo, $userId, "Обновил дефект #$id", 'defects', $id);
                 $_SESSION['flash_success'] = "Дефект #$id обновлён";
             } else {
@@ -184,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } else {
         if ($error === null) {
-            if (addDefect($pdo, $title, $description, $point_id, $userId, $photo_path)) {
+            if (addDefect($pdo, $title, $description, $point_id, $userId, $photo_path, $category, $severity)) {
                 addLog($pdo, $userId, "Добавил новый дефект", 'defects', 0);
                 $_SESSION['flash_success'] = "Дефект добавлен!";
             } else {
@@ -199,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
 }
 
-// --- GET ---
+
 if (isset($_GET['fix_id'])) {
     $defect_id = (int)$_GET['fix_id'];
     $defect = getDefectById($pdo, $defect_id);
@@ -214,11 +208,22 @@ if (isset($_GET['fix_id'])) {
 }
 
 $editableDefect = null;
+$preSelectedPointId = null;
+
+if (isset($_GET['point_id'])) {
+    $preSelectedPointId = (int)$_GET['point_id'];
+}
+
 if (isset($_GET['edit_id'])) {
     $edit_id = (int)$_GET['edit_id'];
     if ($edit_id > 0) $editableDefect = getDefectById($pdo, $edit_id);
 }
-$defects       = getDefects($pdo);
+
+$defects = getDefects($pdo);
+foreach ($defects as &$defect) {
+    $defect['used_materials'] = getMaterialsUsedForDefect($pdo, $defect['id']);
+}
 $networkPoints = getStatsPoints($pdo);
 include '../views/defects.view.php';
 exit();
+?>
