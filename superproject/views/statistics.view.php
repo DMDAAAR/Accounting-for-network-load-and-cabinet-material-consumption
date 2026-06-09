@@ -16,21 +16,6 @@ if (!defined('APP_LOADED')) {
 <?php include __DIR__ . '/components/header.view.php'; ?>
 
 <div class="container mt-4">
-<<<<<<< Updated upstream
-    <h2 class="mb-4"><i class="bi bi-graph-up"></i> Статистика кабинета 319Б</h2>
-
-    <!-- Карточки показателей -->
-    <div class="row g-4 mb-5">
-        <div class="col-md-3">
-            <div class="card text-white bg-primary h-100 shadow">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title">Всего ПК</h6>
-                            <h2 class="display-4 mb-0"><?= $totalComputers ?></h2>
-                        </div>
-                        <i class="bi bi-pc-display display-1 opacity-50"></i>
-=======
     <h2 class="mb-4"><i class="bi bi-graph-up"></i> Статистика расхода материалов</h2>
     <div class="row g-4 mb-5">
         <div class="col-md-3">
@@ -46,22 +31,11 @@ if (!defined('APP_LOADED')) {
                     </div>
                     <div class="mt-3 small text-muted">
                         <i class="bi bi-box"></i> Остаток: <?= number_format($materialsRemaining['cable'], 2) ?> м
->>>>>>> Stashed changes
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-<<<<<<< Updated upstream
-            <div class="card text-white bg-success h-100 shadow">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title">Активные точки</h6>
-                            <h2 class="display-4 mb-0"><?= $networkStats['active'] ?></h2>
-                        </div>
-                        <i class="bi bi-check-circle-fill display-1 opacity-50"></i>
-=======
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -74,22 +48,11 @@ if (!defined('APP_LOADED')) {
                     </div>
                     <div class="mt-3 small text-muted">
                         <i class="bi bi-box"></i> Остаток: <?= number_format($materialsRemaining['connector'], 0) ?> шт
->>>>>>> Stashed changes
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-<<<<<<< Updated upstream
-            <div class="card text-white bg-danger h-100 shadow">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title">Точки с дефектом</h6>
-                            <h2 class="display-4 mb-0"><?= $networkStats['defect'] ?></h2>
-                        </div>
-                        <i class="bi bi-exclamation-triangle-fill display-1 opacity-50"></i>
-=======
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -102,22 +65,11 @@ if (!defined('APP_LOADED')) {
                     </div>
                     <div class="mt-3 small text-muted">
                         <i class="bi bi-box"></i> Остаток: <?= number_format($materialsRemaining['socket'], 0) ?> шт
->>>>>>> Stashed changes
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-<<<<<<< Updated upstream
-            <div class="card text-white bg-secondary h-100 shadow">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title">Списано точек</h6>
-                            <h2 class="display-4 mb-0"><?= $networkStats['decommissioned'] ?></h2>
-                        </div>
-                        <i class="bi bi-slash-circle display-1 opacity-50"></i>
-=======
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
@@ -130,7 +82,6 @@ if (!defined('APP_LOADED')) {
                     </div>
                     <div class="mt-3 small text-muted">
                         <i class="bi bi-calendar"></i> За всё время
->>>>>>> Stashed changes
                     </div>
                 </div>
             </div>
@@ -140,21 +91,13 @@ if (!defined('APP_LOADED')) {
     <!-- Круговые диаграммы -->
     <div class="row mb-5">
         <div class="col-md-6">
-<<<<<<< Updated upstream
-            <div class="card shadow h-100">
-=======
             <div class="card shadow-sm h-100">
->>>>>>> Stashed changes
                 <div class="card-header bg-light">
                     <h5 class="mb-0"><i class="bi bi-pie-chart"></i> Сетевые точки по статусам</h5>
                 </div>
                 <div class="card-body text-center">
                     <?php if ($totalNetwork > 0): ?>
-<<<<<<< Updated upstream
-                        <div class="donut-chart" style="width: 220px; height: 220px; margin: 0 auto 20px; border-radius: 50%; background: conic-gradient(
-=======
                         <div style="width: 220px; height: 220px; margin: 0 auto 20px; border-radius: 50%; background: conic-gradient(
->>>>>>> Stashed changes
                         <?php
                         $parts = [];
                         foreach ($networkAngles as $item) {
@@ -178,18 +121,6 @@ if (!defined('APP_LOADED')) {
             </div>
         </div>
         <div class="col-md-6">
-<<<<<<< Updated upstream
-            <div class="card shadow h-100">
-                <div class="card-header bg-light">
-                    <h5 class="mb-0"><i class="bi bi-box-seam"></i> Материалы на складе</h5>
-                </div>
-                <div class="card-body text-center">
-                    <?php if ($totalMaterial > 0): ?>
-                        <div class="donut-chart" style="width: 220px; height: 220px; margin: 0 auto 20px; border-radius: 50%; background: conic-gradient(
-                        <?php
-                        $parts = [];
-                        foreach ($materialAngles as $item) {
-=======
             <div class="card shadow-sm h-100">
                 <div class="card-header bg-light">
                     <h5 class="mb-0"><i class="bi bi-box-seam"></i> Остатки материалов на складе</h5>
@@ -200,64 +131,30 @@ if (!defined('APP_LOADED')) {
                         <?php
                         $parts = [];
                         foreach ($remainingAngles as $item) {
->>>>>>> Stashed changes
                             $parts[] = "{$item['color']} {$item['start']}deg {$item['end']}deg";
                         }
                         echo implode(', ', $parts);
                         ?>
                                 );"></div>
                     <?php else: ?>
-<<<<<<< Updated upstream
-                        <div class="alert alert-info">Нет данных по материалам</div>
-                    <?php endif; ?>
-                    <div class="row mt-3">
-                        <?php foreach ($materialAngles as $item): ?>
-=======
                         <div class="alert alert-info">Нет данных по остаткам материалов</div>
                     <?php endif; ?>
                     <div class="row mt-3">
                         <?php foreach ($remainingAngles as $item): ?>
->>>>>>> Stashed changes
                             <div class="col-4">
                                 <span class="badge" style="background-color: <?= $item['color'] ?>; width: 20px; height: 20px; display: inline-block; vertical-align: middle;"></span>
                                 <span><?= $item['label'] ?>: <?= number_format($item['value'], 2) ?></span>
                             </div>
                         <?php endforeach; ?>
                     </div>
-<<<<<<< Updated upstream
-                    <div class="alert alert-warning mt-3 small">
-                        <i class="bi bi-info-circle"></i> Единицы измерения разные (метры / штуки). Диаграмма показывает долю от общего числа единиц.
-=======
                     <div class="alert alert-info mt-3 small">
                         <i class="bi bi-info-circle"></i> Текущие остатки материалов на складе
->>>>>>> Stashed changes
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-<<<<<<< Updated upstream
-    <!-- Панель коммутатора -->
-    <div class="card shadow mb-5">
-        <div class="card-header bg-dark text-white">
-            <h5 class="mb-0"><i class="bi bi-hdd-stack"></i> Коммутатор — 17 портов</h5>
-        </div>
-        <div class="card-body">
-            <div class="ports-grid">
-                <?php for ($i = 1; $i <= 17; $i++):
-                    $port = $switchPorts[$i];
-                    $colorClass = '';
-                    $title = '';
-                    switch ($port['color']) {
-                        case 'green':
-                            $colorClass = 'port-green';
-                            $title = 'Порт ' . $i . ' — левая стена (активен)';
-                            break;
-                        case 'blue':
-                            $colorClass = 'port-blue';
-                            $title = 'Порт ' . $i . ' — правая стена (активен)';
-=======
     <!-- Панель коммутатора - 24 порта -->
     <div class="card shadow-sm mb-5">
         <div class="card-header bg-dark text-white">
@@ -267,7 +164,7 @@ if (!defined('APP_LOADED')) {
             <div class="ports-grid" style="grid-template-columns: repeat(12, 1fr); gap: 12px;">
                 <?php for ($i = 1; $i <= 24; $i++):
                     $color = 'gray';
-                    
+
                     if (isset($switchPorts[$i])) {
                         $color = $switchPorts[$i]['color'];
                     } else {
@@ -277,7 +174,7 @@ if (!defined('APP_LOADED')) {
                             $color = 'blue';
                         }
                     }
-                    
+
                     $colorClass = '';
                     $title = '';
                     switch ($color) {
@@ -288,7 +185,6 @@ if (!defined('APP_LOADED')) {
                         case 'blue':
                             $colorClass = 'port-blue';
                             $title = 'Порт ' . $i . ' — правая сторона (активен)';
->>>>>>> Stashed changes
                             break;
                         case 'red':
                             $colorClass = 'port-red';
@@ -304,15 +200,9 @@ if (!defined('APP_LOADED')) {
                     </div>
                 <?php endfor; ?>
             </div>
-<<<<<<< Updated upstream
-            <div class="legend-switch mt-4 d-flex justify-content-center gap-4">
-                <span><i class="bi bi-circle-fill" style="color: #28a745;"></i> Левая стена (1-8)</span>
-                <span><i class="bi bi-circle-fill" style="color: #0d6efd;"></i> Правая стена (9-17)</span>
-=======
             <div class="legend-switch mt-4 d-flex justify-content-center gap-4 flex-wrap">
                 <span><i class="bi bi-circle-fill" style="color: #28a745;"></i> Левая сторона (1-12)</span>
                 <span><i class="bi bi-circle-fill" style="color: #0d6efd;"></i> Правая сторона (13-24)</span>
->>>>>>> Stashed changes
                 <span><i class="bi bi-circle-fill" style="color: #dc3545;"></i> Дефект</span>
                 <span><i class="bi bi-circle-fill" style="color: #adb5bd;"></i> Свободен</span>
             </div>
