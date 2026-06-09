@@ -15,13 +15,18 @@ require_once '../models/logs.model.php';
 
 $userId = $_SESSION['user']['id'];
 
-
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $limit = 10;
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 $offset = ($page - 1) * $limit;
 
 $points = getFilteredPoints($pdo, $search, $limit, $offset);
+
+// ДОБАВЛЯЕМ МАТЕРИАЛЫ ДЛЯ КАЖДОЙ ТОЧКИ
+foreach ($points as &$point) {
+    $point['materials'] = getMaterialsUsedForPoint($pdo, $point['id']);
+}
+
 $totalPoints = getTotalFilteredPoints($pdo, $search);
 $totalPages = ceil($totalPoints / $limit);
 
@@ -35,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $newId = addNetworkPoint($pdo, $label, $type, $status, $location_id);
         addLog($pdo, $userId, "Добавил точку: $label", 'network_points', 0);
         $_SESSION['flash_success'] = "Точка '$label' добавлена";
-        
+
         if ($status === 'defect'){
             $_SESSION['flash_info'] = "Пожалуйста, подробно опишите неисправность точки '$label'";
             header("Location: defects.controller.php?point_id=" . $newId);
@@ -49,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     exit();
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'edit') {
     $id = (int)($_POST['id'] ?? 0);
     $label = trim($_POST['label'] ?? '');
@@ -61,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         updateNetworkPoint($pdo, $id, $label, $type, $status, $location_id);
         addLog($pdo, $userId, "Изменил точку: $label", 'network_points', $id);
         $_SESSION['flash_success'] = "Точка '$label' обновлена";
-        
+
         if ($status === 'defect'){
             $_SESSION['flash_info'] = "Пожалуйста, подробно опишите неисправность точки '$label'";
             header("Location: defects.controller.php?point_id=" . $id);
@@ -97,11 +101,14 @@ if (isset($_GET['edit_id'])) {
     $edit_id = (int)$_GET['edit_id'];
     if ($edit_id > 0) {
         $edit_point = getStatsPointById($pdo, $edit_id);
+        // Для редактируемой точки тоже можно добавить материалы, если нужно
+        if ($edit_point) {
+            $edit_point['materials'] = getMaterialsUsedForPoint($pdo, $edit_id);
+        }
     }
 }
 
 $rooms = getRooms($pdo);
-
 
 require '../views/inventory.view.php';
 ?>
