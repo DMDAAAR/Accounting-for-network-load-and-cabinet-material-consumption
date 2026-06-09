@@ -23,6 +23,14 @@ session_start();
     <?php if (isset($_SESSION['flash_success'])): ?>
         <div class="alert alert-success alert-dismissible fade show"><?= htmlspecialchars($_SESSION['flash_success']); unset($_SESSION['flash_success']); ?><button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
     <?php endif; ?>
+    
+    <?php if (isset($_SESSION['flash_info'])): ?>
+        <div class="alert alert-info alert-dismissible fade show">
+            <i class="bi bi-info-circle-fill"></i> 
+            <?= htmlspecialchars($_SESSION['flash_info']); unset($_SESSION['flash_info']); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    <?php endif; ?>
 
     <div class="row">
         <div class="col-lg-4 mb-4">
@@ -51,7 +59,18 @@ session_start();
                             <label class="form-label">Точка сети</label>
                             <select name="point_id" class="form-select" required>
                                 <?php foreach ($networkPoints as $point): ?>
-                                    <option value="<?= $point['id'] ?>" <?= (isset($editableDefect) && $editableDefect['point_id'] == $point['id']) ? 'selected' : '' ?>>
+                                    <?php
+                                    $selected = false;
+                                    // Если редактируем дефект - выбираем сохранённую точку
+                                    if (isset($editableDefect) && $editableDefect['point_id'] == $point['id']) {
+                                        $selected = true;
+                                    }
+                                    // Если перешли с inventory (статус defect) - выбираем переданную точку
+                                    if (isset($preSelectedPointId) && $preSelectedPointId == $point['id']) {
+                                        $selected = true;
+                                    }
+                                    ?>
+                                    <option value="<?= $point['id'] ?>" <?= $selected ? 'selected' : '' ?>>
                                         <?= htmlspecialchars($point['label']) ?> (ID <?= $point['id'] ?>)
                                     </option>
                                 <?php endforeach; ?>

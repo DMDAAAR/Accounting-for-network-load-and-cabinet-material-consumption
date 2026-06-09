@@ -18,7 +18,6 @@ require_once '../models/logs.model.php';
 
 $userId = $_SESSION['user']['id'];
 
-// --- Функция для создания папки и получения пути для сохранения ---
 function getUploadPath($relativePath = 'uploads/defects/') {
     $projectRoot = dirname(__DIR__);
     $fullPath = $projectRoot . '/' . ltrim($relativePath, '/');
@@ -35,7 +34,7 @@ function getUploadPath($relativePath = 'uploads/defects/') {
     return $fullPath;
 }
 
-// --- Обработка POST ---
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 1. Починка
@@ -148,7 +147,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Валидация полей
     $error = null;
     if (empty($title)) $error = "Укажите название поломки";
     elseif (empty($description)) $error = "Опишите проблему";
@@ -195,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
 }
 
-// --- GET ---
+
 if (isset($_GET['fix_id'])) {
     $defect_id = (int)$_GET['fix_id'];
     $defect = getDefectById($pdo, $defect_id);
@@ -210,10 +208,17 @@ if (isset($_GET['fix_id'])) {
 }
 
 $editableDefect = null;
+$preSelectedPointId = null;
+
+if (isset($_GET['point_id'])) {
+    $preSelectedPointId = (int)$_GET['point_id'];
+}
+
 if (isset($_GET['edit_id'])) {
     $edit_id = (int)$_GET['edit_id'];
     if ($edit_id > 0) $editableDefect = getDefectById($pdo, $edit_id);
 }
+
 $defects = getDefects($pdo);
 foreach ($defects as &$defect) {
     $defect['used_materials'] = getMaterialsUsedForDefect($pdo, $defect['id']);
@@ -221,3 +226,4 @@ foreach ($defects as &$defect) {
 $networkPoints = getStatsPoints($pdo);
 include '../views/defects.view.php';
 exit();
+?>
