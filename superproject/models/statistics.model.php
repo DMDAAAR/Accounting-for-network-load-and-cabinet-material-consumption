@@ -23,9 +23,6 @@ function getNetworkPointsStats($pdo) {
     return $stats;
 }
 
-<<<<<<< Updated upstream
-function getMaterialsStats($pdo) {
-=======
 function getMaterialsUsageStats($pdo) {
     // Расход кабеля (в метрах)
     $sqlCable = "SELECT SUM(mu.quantity) as total 
@@ -35,7 +32,7 @@ function getMaterialsUsageStats($pdo) {
     $stmt = $pdo->prepare($sqlCable);
     $stmt->execute();
     $cableUsed = (float)($stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0);
-    
+
     // Расход коннекторов (в штуках)
     $sqlConnector = "SELECT SUM(mu.quantity) as total 
                      FROM material_usage mu
@@ -44,7 +41,7 @@ function getMaterialsUsageStats($pdo) {
     $stmt = $pdo->prepare($sqlConnector);
     $stmt->execute();
     $connectorUsed = (float)($stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0);
-    
+
     // Расход розеток (в штуках)
     $sqlSocket = "SELECT SUM(mu.quantity) as total 
                   FROM material_usage mu
@@ -53,13 +50,13 @@ function getMaterialsUsageStats($pdo) {
     $stmt = $pdo->prepare($sqlSocket);
     $stmt->execute();
     $socketUsed = (float)($stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0);
-    
+
     // Общее количество операций расхода
     $sqlTotalOps = "SELECT COUNT(*) as total FROM material_usage";
     $stmt = $pdo->prepare($sqlTotalOps);
     $stmt->execute();
     $totalOperations = (int)($stmt->fetch(PDO::FETCH_ASSOC)['total'] ?? 0);
-    
+
     return [
         'cable' => ['used' => $cableUsed, 'unit' => 'м', 'label' => 'Кабель'],
         'connector' => ['used' => $connectorUsed, 'unit' => 'шт', 'label' => 'Коннекторы'],
@@ -69,7 +66,6 @@ function getMaterialsUsageStats($pdo) {
 }
 
 function getMaterialsRemainingStats($pdo) {
->>>>>>> Stashed changes
     $sql = "SELECT type, SUM(quantity) as total FROM materials 
             WHERE type IN ('cable','connector','socket')
             GROUP BY type";
@@ -99,11 +95,7 @@ function getSwitchPortsData($pdo) {
     $defectiveMap = array_flip($defectivePoints);
 
     $ports = [];
-<<<<<<< Updated upstream
-    for ($i = 1; $i <= 17; $i++) {
-=======
     for ($i = 1; $i <= 24; $i++) {
->>>>>>> Stashed changes
         $ports[$i] = [
             'port' => $i,
             'color' => 'gray',
@@ -113,28 +105,16 @@ function getSwitchPortsData($pdo) {
 
     foreach ($points as $point) {
         $pointId = $point['id'];
-<<<<<<< Updated upstream
-        if ($pointId >= 1 && $pointId <= 17) {
-=======
         if ($pointId >= 1 && $pointId <= 24) {
->>>>>>> Stashed changes
             $ports[$pointId]['point_id'] = $pointId;
             if (isset($defectiveMap[$pointId])) {
                 $ports[$pointId]['color'] = 'red';
             } else {
-<<<<<<< Updated upstream
-                $ports[$pointId]['color'] = ($pointId <= 8) ? 'green' : 'blue';
-=======
                 $ports[$pointId]['color'] = ($pointId <= 12) ? 'green' : 'blue';
->>>>>>> Stashed changes
             }
         }
     }
 
     return $ports;
-<<<<<<< Updated upstream
-}
-=======
 }
 ?>
->>>>>>> Stashed changes
