@@ -7,7 +7,7 @@ if (!defined('APP_LOADED')) die('Прямой доступ запрещен');
     <div class="container-fluid px-3 px-md-5">
         <div class="row align-items-center gy-2">
             <div class="col-md-4 text-center text-md-start">
-                <span class="text-muted small">© <?= date('Y') ?> Учёт ЛВС — Кабинеты КИМРТ</span>
+                <span class="text-muted small">© <?= date('Y') ?> Учёт ЛВС — Кабинет 319Б</span>
             </div>
             <div class="col-md-4 text-center">
                 <a href="https://github.com/DMDAAAR/Accounting-for-network-load-and-cabinet-material-consumption.git" target="_blank" class="text-decoration-none" style="color: #2c5e2c;">
